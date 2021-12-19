@@ -1,6 +1,11 @@
 import React from "react";
 import { Route, Routes } from "react-router-dom";
-
+import AdminPage from "../AdminPage/AdminPage";
+import OrdersPage from "../AdminPage/OrdersPage";
+import ProductsPage from "../AdminPage/ProductsPage";
+import DiscountPage from "../AdminPage/DiscountPage";
+import UsersPage from "../AdminPage/UsersPage";
+import CategoriesPage from "../AdminPage/CategoriesPage";
 export default function Router() {
   return (
     <>
