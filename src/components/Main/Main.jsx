@@ -58,7 +58,6 @@ export default function Main() {
           <div className="container-fluid px-4">
           {/* main content here */}
                 <Router/>
-
           </div>
         </div>
       </div>
