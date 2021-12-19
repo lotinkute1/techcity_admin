@@ -1,4 +1,3 @@
-import React from "react";
 import "./fonts/icomoon/style.css";
 // import "./css/owl.carousel.min.css";
 //  Bootstrap CSS
@@ -8,9 +7,11 @@ import "./css/style.css";
 // import "./js/popper.min.js";
 // import "./js/bootstrap.min.js";
 // import "./js/jquery-3.3.1.min.js";
+
 import "./js/main.js";
 
 export default function TableData() {
+  
   return (
     <div className="table-responsive">
       <table className="table table-striped custom-table">
