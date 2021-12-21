@@ -61,15 +61,19 @@ export default function TableDataProduct() {
                     />
                   </div>
                 </td>
-                <td width={"300px"}>{product.product_name}</td>
-                <td width={"100px"}>{product.number}</td>
-                <td width={"150px"}>
+                <td width={"300px"} className="pt-84">
+                  {product.product_name}
+                </td>
+                <td width={"100px"} className="pt-84">
+                  {product.product_number}
+                </td>
+                <td width={"150px"} className="pt-84">
                   {new Intl.NumberFormat("vi-VN", {
                     style: "currency",
                     currency: "VND",
                   }).format(product.default_price)}
                 </td>
-                <td>
+                <td className="pt-84">
                   <button type="button" className="btn btn-info">
                     Edit
                   </button>
