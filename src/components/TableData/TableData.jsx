@@ -17,7 +17,6 @@ export default function TableData() {
       <table className="table table-striped custom-table">
         <thead>
           <tr>
-            
             <th scope="col">Order</th>
             <th scope="col">Name</th>
             <th scope="col">Occupation</th>

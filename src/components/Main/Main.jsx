@@ -56,7 +56,7 @@ export default function Main() {
           </div>
           <div className="container-fluid px-4">
             {/* main content here */}
-            <Router />
+              <Router/>
           </div>
         </div>
       </div>

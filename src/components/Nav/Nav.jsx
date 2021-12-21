@@ -13,36 +13,36 @@ export default function Nav() {
                 <img src={logo} alt=""  />
               </div>
               <div className="nav-bar__lists">
-                <a href="/#">
+                <Link to="/AdminPage">
                   <div className="nav-bar__list">
                     <i className="fas fa-user-secret" /> admin{" "}
                   </div>
-                </a>
-                <a href="/#">
+                </Link>
+                <Link to="/OrdersPage">
                   <div className="nav-bar__list">
                     <i className="fas fa-shopping-cart" /> orders{" "}
                   </div>
-                </a>
-                <a href="/#">
+                </Link>
+                <Link to="/ProductsPage">
                   <div className="nav-bar__list">
                     <i className="fas fa-archive" /> products
                   </div>
-                </a>
-                <a href="/#">
+                </Link>
+                <Link to="/DiscountPage">
                   <div className="nav-bar__list">
                     <i className="fas fa-tags" /> discounts
                   </div>
-                </a>
-                <a href="/#">
+                </Link>
+                <Link to="/UsersPage">
                   <div className="nav-bar__list">
                     <i className="fas fa-users" /> users
                   </div>
-                </a>
-                <a href="/#">
+                </Link>
+                <Link to="/CategoriesPage">
                   <div className="nav-bar__list">
-                    <i className="far fa-calendar-check" /> categories
+                   <i className="far fa-calendar-check" /> categories
                   </div>
-                </a>
+                </Link>
               </div>
             </div>
           </div>
