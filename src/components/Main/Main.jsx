@@ -2,7 +2,6 @@ import React from "react";
 
 import Router from "../../features/Router/Router";
 
-
 export default function Main() {
   return (
     <div className="col">
@@ -56,9 +55,8 @@ export default function Main() {
             </div>
           </div>
           <div className="container-fluid px-4">
-          {/* main content here */}
-                <Router/>
-
+            {/* main content here */}
+            <Router />
           </div>
         </div>
       </div>
