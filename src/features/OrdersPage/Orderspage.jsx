@@ -1,6 +1,6 @@
 import React from 'react'
 
-export default function Orderspage() {
+export default function OrdersPage() {
     return (
         <div>
             Orderspage
