@@ -2,6 +2,8 @@ window.onload = () => {
   const $ = document.querySelector.bind(document);
   const $$ = document.querySelectorAll.bind(document);
   const statusBtns=$$('.ios-switch input[type="checkbox"]');
+
+  console.log(statusBtns);
   for(let i=0;i<statusBtns.length;i++) {
     console.log("cc");
     statusBtns[i].onclick=function (e) {

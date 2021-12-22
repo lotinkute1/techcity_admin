@@ -2,7 +2,7 @@ import React, { useState } from "react";
 import PropTypes from "prop-types";
 import FormInput from "./components/FormInput";
 import TableDataCategories from "../../components/TableDataCategories/TableDataCategories";
-
+import "../../components/TableDataCategories/js/main";
 CategoriesPage.propTypes = {};
 
 function CategoriesPage(props) {
