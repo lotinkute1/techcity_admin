@@ -3,7 +3,6 @@ window.onload = () => {
   const $$ = document.querySelectorAll.bind(document);
   const statusBtns=$$('.ios-switch input[type="checkbox"]');
   for(let i=0;i<statusBtns.length;i++) {
-    console.log("cc");
     statusBtns[i].onclick=function (e) {
         if (e.target.closest("tr").classList.contains("active")) {
           e.target.closest("tr").classList.remove("active");

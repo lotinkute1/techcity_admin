@@ -14,7 +14,12 @@ import { useEffect, useState } from "react";
 
 export default function TableDataCategories() {
   const [categories, setCategories] = useState([]);
-
+  const handleClickTogle = (e) => {
+    const tableRowElement = e.target.closest(".table-row");
+    if (tableRowElement) {
+      tableRowElement.classList.toggle("active");
+    }
+  };
   // }
   useEffect(() => {
     (() => {
@@ -33,41 +38,62 @@ export default function TableDataCategories() {
     })();
   }, []);
 
-  console.log(categories);
   return (
-    <div className="table-responsive">
-      <table className="table table-striped custom-table">
-        <thead>
-          <tr>
-            <th scope="col">Name</th>
-            <th scope="col">Status</th>
-            <th scope="col">Action</th>
-          </tr>
-        </thead>
-        <tbody>
-          {categories.map((category, index) => (
-            <>
-              <tr>
-                <td width={"300px"} className="">
-                  {category.category_name}
-                </td>
-                <td width={"100px"} className="">
-                  {category.status}
-                </td>
+    <>
+      <div className="table-responsive">
+        <table className="table table-striped custom-table">
+          <thead>
+            <tr>
+              <th scope="col">Name</th>
+              <th scope="col">Status</th>
+              <th scope="col">Action</th>
+              <th scope="col">status</th>
+            </tr>
+          </thead>
+          <tbody>
+            {categories.map((category, index) => (
+              <>
+                <tr key={index} className="table-row">
+                  <td width={"300px"} className="">
+                    <div className="d-flex align-items-center justify-content-center">
+                      <a href="/#" className="name">
+                        {category.category_name}
+                      </a>
+                    </div>
+                  </td>
+                  <td width={"100px"} className="">
+                    {category.status}
+                  </td>
 
-                <td className="">
-                  <button type="button" className="btn btn-info">
-                    Edit
-                  </button>
-                  <button type="button" className="btn btn-danger">
-                    Remove
-                  </button>
-                </td>
-              </tr>
-            </>
-          ))}
-        </tbody>
-      </table>
-    </div>
+                  <td className="">
+                    <button type="button" className="btn btn-info">
+                      Edit
+                    </button>
+                    <button type="button" className="btn btn-danger">
+                      Remove
+                    </button>
+                  </td>
+
+                  <td>
+                    <label className="custom-control ios-switch">
+                      <input
+                        onClick={(e) => handleClickTogle(e)}
+                        type="checkbox"
+                        className="ios-switch-control-input"
+                        defaultChecked
+                      />
+                      <span
+                        className="ios-switch-control-indicator"
+                        defaultChecked
+                      />
+                    </label>
+                  </td>
+                </tr>
+              </>
+            ))}
+          </tbody>
+        </table>
+      </div>
+    </>
   );
 }
