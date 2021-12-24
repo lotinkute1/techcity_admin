@@ -3,12 +3,33 @@ import PropTypes from "prop-types";
 import FormInput from "./components/FormInput";
 import TableDataCategories from "../../components/TableDataCategories/TableDataCategories";
 import "../../components/TableDataCategories/js/main";
+import firebase from "../../utils/firebase";
+import { v4 as uuidv4 } from "uuid";
+
+import {
+  getDatabase,
+  ref,
+  onValue,
+  remove,
+  set,
+  update,
+  child,
+} from "firebase/database";
 CategoriesPage.propTypes = {};
 
 function CategoriesPage(props) {
   const [openForm, setOpenForm] = useState(false);
-  const handleClick = () => {
+  const [formValue, setFormValue] = useState({});
+  const handleClickOpenForm = () => {
     setOpenForm((x) => !x);
+  };
+
+  const handleAddBtn = (formValue) => {
+    setFormValue(formValue);
+    const db = getDatabase();
+    set(ref(db, "categories/" + uuidv4()), {
+      ...formValue,
+    });
   };
   return (
     <>
@@ -21,14 +42,14 @@ function CategoriesPage(props) {
           {openForm && (
             <>
               <div className="row g-3 mb-2 ">
-                <FormInput />
+                <FormInput onChange={handleAddBtn} />
               </div>
             </>
           )}
           <div className="row g-3 mb-2 ">
             <div className="col mt-0 text-end">
               <button
-                onClick={handleClick}
+                onClick={handleClickOpenForm}
                 type="button"
                 className="btn btn-primary"
               >
@@ -38,7 +59,7 @@ function CategoriesPage(props) {
           </div>
 
           <div className="card shadow mb-4">
-            <TableDataCategories />
+            <TableDataCategories onClick= {handleClickOpenForm} formValue={formValue} />
           </div>
         </div>
       </div>
