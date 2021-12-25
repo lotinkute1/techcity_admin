@@ -23,9 +23,13 @@ import {
 import { useEffect, useState } from "react";
 
 TableDataCategories.propTypes = {
+  onEditClick: PropTypes.func,
   onClick: PropTypes.func,
 };
-export default function TableDataCategories({ onClick = null }) {
+export default function TableDataCategories({
+  onEditClick = null,
+  onClick = null,
+}) {
   const [categories, setCategories] = useState([]);
   const db = getDatabase();
 
@@ -38,8 +42,9 @@ export default function TableDataCategories({ onClick = null }) {
 
   const handleEditClick = (category) => {
     if (onClick) onClick();
-    const categoryRef = ref(db, "categories");
+    if (onEditClick) onEditClick(category.id);
   };
+
   useEffect(() => {
     (() => {
       const categoryRef = ref(db, "categories");
@@ -52,11 +57,9 @@ export default function TableDataCategories({ onClick = null }) {
             status: snapshot.val()[id].status,
           });
         }
-
         setCategories([...newCategories]);
       });
     })();
-    console.log(categories);
   }, []);
 
   return (
@@ -112,11 +115,15 @@ export default function TableDataCategories({ onClick = null }) {
                         onClick={(e) => handleClickTogle(e)}
                         type="checkbox"
                         className="ios-switch-control-input"
-                        defaultChecked={category.status > 0 ? true : false}
+                        defaultChecked={
+                          parseInt(category.status) > 0 ? true : false
+                        }
                       />
                       <span
                         className="ios-switch-control-indicator"
-                        defaultChecked={category.status > 0 ? true : false}
+                        defaultChecked={
+                          parseInt(category.status) > 0 ? true : false
+                        }
                       />
                     </label>
                   </td>

@@ -19,17 +19,31 @@ CategoriesPage.propTypes = {};
 
 function CategoriesPage(props) {
   const [openForm, setOpenForm] = useState(false);
-  const [formValue, setFormValue] = useState({});
+  // const [formValue, setFormValue] = useState({});
   const handleClickOpenForm = () => {
     setOpenForm((x) => !x);
   };
 
   const handleAddBtn = (formValue) => {
-    setFormValue(formValue);
+    // setFormValue({
+    //   category_name: formValue.category_name.trim(),
+    //   status: formValue.status.trim(),
+    // });
+
     const db = getDatabase();
     set(ref(db, "categories/" + uuidv4()), {
       ...formValue,
+      category_name: formValue.category_name.trim(),
+      status: formValue.status.trim(),
     });
+  };
+
+  const handleEditClick = (categoryId) => {
+    console.log(categoryId);
+    const db = getDatabase();
+
+    const categoryRef = ref(db, "categories");
+    // set(ref(db,'/categories/' + categoryId),{})
   };
   return (
     <>
@@ -59,7 +73,10 @@ function CategoriesPage(props) {
           </div>
 
           <div className="card shadow mb-4">
-            <TableDataCategories onClick= {handleClickOpenForm} formValue={formValue} />
+            <TableDataCategories
+              onClick={handleClickOpenForm}
+              onEditClick={handleEditClick}
+            />
           </div>
         </div>
       </div>

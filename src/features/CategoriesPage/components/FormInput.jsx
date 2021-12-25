@@ -16,7 +16,7 @@ function FormInput({ onChange = null }) {
   const handleInputChange = (e) => {
     setFormValue({
       ...formValue,
-      [e.target.name]: e.target.value.trim(),
+      [e.target.name]: e.target.value,
     });
   };
   const handleAddClick = (e) => {
@@ -26,6 +26,17 @@ function FormInput({ onChange = null }) {
     Array.from(document.querySelectorAll("input[name]")).forEach((input) => {
       input.value = "";
     });
+    setFormValue(initialFormData);
+  };
+
+  const handleSaveClick = (e) => {
+    e.preventDefault();
+    if (!onChange) return;
+    onChange(formValue);
+    Array.from(document.querySelectorAll("input[name]")).forEach((input) => {
+      input.value = "";
+    });
+    setFormValue(initialFormData);
   };
   return (
     <>
@@ -39,7 +50,7 @@ function FormInput({ onChange = null }) {
               id="categort-name"
               type="text"
               onChange={handleInputChange}
-              value={formValue}
+              value={formValue.category_name}
             />
           </div>
           <div className="col-sm fw-bold">
@@ -49,6 +60,7 @@ function FormInput({ onChange = null }) {
               className="form-control"
               id="status"
               type="text"
+              value={formValue.status}
               onChange={handleInputChange}
             />
           </div>
@@ -62,6 +74,13 @@ function FormInput({ onChange = null }) {
             className="btn btn-success"
           >
             Add
+          </button>
+          <button
+            type="submit"
+            onClick={handleSaveClick}
+            className="btn btn-info"
+          >
+            Save
           </button>
         </div>
       </div>
