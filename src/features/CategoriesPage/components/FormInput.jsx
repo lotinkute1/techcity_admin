@@ -1,17 +1,38 @@
-import React, { useState } from "react";
+import { getDatabase, onValue, ref } from "firebase/database";
 import PropTypes from "prop-types";
+import React, { useEffect, useState } from "react";
 
 FormInput.propTypes = {
-  onChange: PropTypes.func,
+  onAddBtn: PropTypes.func,
+  onSaveBtn: PropTypes.func,
+  onClick: PropTypes.func,
+  statusBtn: PropTypes.bool,
 };
 
-function FormInput({ onChange = null }) {
+function FormInput({
+  onAddBtn = null,
+  onSaveBtn = null,
+  onClick = null,
+  categoryId,
+  statusBtn = true,
+}) {
   const initialFormData = Object.freeze({
     category_name: "",
     status: "",
   });
 
   const [formValue, setFormValue] = useState(initialFormData);
+
+  useEffect(() => {
+    console.log(categoryId);
+    const db = getDatabase();
+    (() => {
+      const categoryRef = ref(db, "categories/" + categoryId);
+      onValue(categoryRef, (snapshot) => {
+        setFormValue(snapshot.val());
+      });
+    })();
+  }, [categoryId]);
 
   const handleInputChange = (e) => {
     setFormValue({
@@ -21,8 +42,8 @@ function FormInput({ onChange = null }) {
   };
   const handleAddClick = (e) => {
     e.preventDefault();
-    if (!onChange) return;
-    onChange(formValue);
+    if (!onAddBtn) return;
+    onAddBtn(formValue);
     Array.from(document.querySelectorAll("input[name]")).forEach((input) => {
       input.value = "";
     });
@@ -31,13 +52,14 @@ function FormInput({ onChange = null }) {
 
   const handleSaveClick = (e) => {
     e.preventDefault();
-    if (!onChange) return;
-    onChange(formValue);
+    if (!onSaveBtn) return;
+    onSaveBtn(formValue);
     Array.from(document.querySelectorAll("input[name]")).forEach((input) => {
       input.value = "";
     });
     setFormValue(initialFormData);
   };
+
   return (
     <>
       <form className="container">
@@ -49,8 +71,8 @@ function FormInput({ onChange = null }) {
               className="form-control"
               id="categort-name"
               type="text"
-              onChange={handleInputChange}
-              value={formValue.category_name}
+              value={formValue?.category_name || ""}
+              onChange={(e) => handleInputChange(e)}
             />
           </div>
           <div className="col-sm fw-bold">
@@ -60,28 +82,31 @@ function FormInput({ onChange = null }) {
               className="form-control"
               id="status"
               type="text"
-              value={formValue.status}
-              onChange={handleInputChange}
+              value={formValue?.status || ""}
+              onChange={(e) => handleInputChange(e)}
             />
           </div>
         </div>
       </form>
       <div className="row g-3 mb-5 ">
         <div className="col mt-0 p-0 text-end">
-          <button
-            type="submit"
-            onClick={handleAddClick}
-            className="btn btn-success"
-          >
-            Add
-          </button>
-          <button
-            type="submit"
-            onClick={handleSaveClick}
-            className="btn btn-info"
-          >
-            Save
-          </button>
+          {statusBtn ? (
+            <button
+              type="submit"
+              onClick={handleAddClick}
+              className="btn btn-success"
+            >
+              Add
+            </button>
+          ) : (
+            <button
+              type="submit"
+              onClick={handleSaveClick}
+              className="btn btn-info"
+            >
+              Save
+            </button>
+          )}
         </div>
       </div>
     </>
