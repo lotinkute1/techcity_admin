@@ -1,33 +1,25 @@
-import "./fonts/icomoon/style.css";
+import classNames from "classnames";
+import {
+  getDatabase, onValue, ref
+} from "firebase/database";
+import PropTypes from "prop-types";
+import { useEffect, useState } from "react";
 // import "./css/owl.carousel.min.css";
 //  Bootstrap CSS
 // import "./css/bootstrap.min.css";
 // Style
 import "./css/style.css";
+import "./fonts/icomoon/style.css";
 // import "./js/popper.min.js";
 // import "./js/bootstrap.min.js";
 // import "./js/jquery-3.3.1.min.js";
-import "../TableDataCategories/js/main.js";
-import classNames from "classnames";
-import PropTypes from "prop-types";
-import firebase from "../../utils/firebase";
-import {
-  getDatabase,
-  ref,
-  onValue,
-  remove,
-  set,
-  update,
-  child,
-} from "firebase/database";
-import { useEffect, useState } from "react";
+import "./js/main";
 
 TableDataCategories.propTypes = {
   onEditClick: PropTypes.func,
   onClick: PropTypes.func,
   onRemoveClick: PropTypes.func,
   onToggleBtn: PropTypes.func,
-  
 };
 export default function TableDataCategories({
   onEditClick = null,
@@ -38,15 +30,14 @@ export default function TableDataCategories({
   const [categories, setCategories] = useState([]);
   const db = getDatabase();
 
-  const handleClickTogle = (e,category) => {
+  const handleClickTogle = (e, category) => {
     const tableRowElement = e.target.closest(".table-row");
     if (tableRowElement) {
       tableRowElement.classList.toggle("active");
     }
-    if(onToggleBtn){
+    if (onToggleBtn) {
       onToggleBtn(category);
     }
-
   };
 
   const handleEditClick = (category) => {
@@ -106,7 +97,6 @@ export default function TableDataCategories({
                 </td>
 
                 <td className="">
-                  
                   <button
                     type="button"
                     onClick={() => {
@@ -130,7 +120,7 @@ export default function TableDataCategories({
                 <td>
                   <label className="custom-control ios-switch">
                     <input
-                      onClick={(e) => handleClickTogle(e,category)}
+                      onClick={(e) => handleClickTogle(e, category)}
                       type="checkbox"
                       className="ios-switch-control-input"
                       defaultChecked={

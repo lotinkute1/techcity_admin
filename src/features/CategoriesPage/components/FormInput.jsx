@@ -67,10 +67,10 @@ function FormInput({
           <div className="col-sm fw-bold">
             <label htmlFor="name">Category name</label>
             <input
-              name="category_name"
               className="form-control"
               id="categort-name"
               type="text"
+              name="category_name"
               value={formValue?.category_name || ""}
               onChange={(e) => handleInputChange(e)}
             />

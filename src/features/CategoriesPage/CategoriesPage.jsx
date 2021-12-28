@@ -1,22 +1,12 @@
+import { getDatabase, ref, remove, set } from "firebase/database";
 import React, { useState } from "react";
-import PropTypes from "prop-types";
-import FormInput from "./components/FormInput";
-import TableDataCategories from "../../components/TableData/TableDataCategories";
-import "../../components/TableDataCategories/js/main";
-import firebase from "../../utils/firebase";
-import { v4 as uuidv4 } from "uuid";
-import { ToastContainer, toast } from "react-toastify";
+import { toast, ToastContainer } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
+import { v4 as uuidv4 } from "uuid";
+import "../../components/TableData/js/main";
+import TableDataCategories from "../../components/TableData/TableDataCategories";
+import FormInput from "./components/FormInput";
 
-import {
-  getDatabase,
-  ref,
-  onValue,
-  remove,
-  set,
-  update,
-  child,
-} from "firebase/database";
 CategoriesPage.propTypes = {};
 
 function CategoriesPage(props) {
@@ -40,7 +30,6 @@ function CategoriesPage(props) {
     setOpenForm((x) => !x);
     setCategoryId(0);
     setStatusBtn(true);
-    // console.log(formValue);
   };
   const handleEditClickOpenForm = () => {
     setOpenForm(true);
