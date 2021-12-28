@@ -46,6 +46,7 @@ export default function TableDataProduct({
         const newProductList = [...productList];
         snapshot.forEach((item) => {
           newProductList.push({
+            id: item.key,
             product_name: item.val().product_name,
             number: item.val().number,
             default_price: item.val().default_price,
@@ -56,6 +57,7 @@ export default function TableDataProduct({
             user_id: item.val().user_id,
           });
         });
+
         setProductList([...newProductList]);
       });
     })();

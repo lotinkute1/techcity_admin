@@ -214,7 +214,6 @@ function FormInput({
         type="text"
         placeholder="URL image"
         name="main_img"
-        value={formValue?.main_img || ""}
         onChange={(e) => handleInputChange(e)}
       />
 

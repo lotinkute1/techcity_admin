@@ -49,7 +49,6 @@ function ProductsPage(props) {
       formValue.user_id !== ""
     ) {
       set(ref(db, "products/" + uuidv4()), {
-        ...formValue,
         product_name: formValue.product_name.trim(),
         number: formValue.number.trim(),
         default_price: formValue.default_price.trim(),
