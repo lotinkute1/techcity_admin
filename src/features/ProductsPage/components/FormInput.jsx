@@ -167,7 +167,11 @@ function FormInput({
             >
               <option value="">--Chọn ID--</option>
               {categoryIds.map((item) => (
-                <option key={item.id} value={item.id}>
+                <option
+                  key={item.id}
+                  value={item.id}
+                  selected={item.id === formValue?.category_id}
+                >
                   {item.id}
                 </option>
               ))}
@@ -184,7 +188,11 @@ function FormInput({
               <option value="">--Chọn ID--</option>
 
               {userIds.map((item) => (
-                <option key={item.id} value={item.id}>
+                <option
+                  key={item.id}
+                  selected={item.id === formValue?.user_id}
+                  value={item.id}
+                >
                   {item.id}
                 </option>
               ))}
