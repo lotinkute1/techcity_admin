@@ -1,7 +1,5 @@
 import classNames from "classnames";
-import {
-  getDatabase, onValue, ref
-} from "firebase/database";
+import { getDatabase, onValue, push, ref } from "firebase/database";
 import PropTypes from "prop-types";
 import { useEffect, useState } from "react";
 // import "./css/owl.carousel.min.css";
@@ -15,28 +13,28 @@ import "./fonts/icomoon/style.css";
 // import "./js/jquery-3.3.1.min.js";
 import "./js/main";
 
-TableDataCategories.propTypes = {
+TableDataUsers.propTypes = {
   onEditClick: PropTypes.func,
   onClick: PropTypes.func,
   onRemoveClick: PropTypes.func,
   onToggleBtn: PropTypes.func,
 };
-export default function TableDataCategories({
+export default function TableDataUsers({
   onEditClick = null,
   onClick = null,
   onRemoveClick = null,
   onToggleBtn = null,
 }) {
-  const [categories, setCategories] = useState([]);
+  const [users, setUsers] = useState([]);
   const db = getDatabase();
 
-  const handleClickTogle = (e, category) => {
+  const handleClickTogle = (e, user) => {
     const tableRowElement = e.target.closest(".table-row");
     if (tableRowElement) {
       tableRowElement.classList.toggle("active");
     }
     if (onToggleBtn) {
-      onToggleBtn(category);
+      onToggleBtn(user);
     }
   };
 
@@ -50,20 +48,118 @@ export default function TableDataCategories({
 
   useEffect(() => {
     (() => {
-      const categoryRef = ref(db, "categories");
+      const categoryRef = ref(db, "users");
       onValue(categoryRef, (snapshot) => {
-        const newCategories = [...categories];
-        for (const id in snapshot.val()) {
+        const newCategories = [];
+        snapshot.forEach(item => {
           newCategories.push({
-            id,
-            category_name: snapshot.val()[id].category_name,
-            status: snapshot.val()[id].status,
-          });
-        }
-        setCategories([...newCategories]);
+            id: item.key,
+            ...item.val()
+          })
+        })
+        // foreach(const id in snapshot.val()) {
+        //   newCategories.push({
+        //     id:item.key,
+        //     category_name: snapshot.val()[id].category_name,
+        //     status: snapshot.val()[id].status,
+        //   });
+        // }
+        setUsers([...newCategories]);
       });
     })();
   }, []);
+
+  const renderProduct = users.map((user, index) => (
+    <tr
+      key={index}
+      className={classNames("table-row", {
+        active: user.user_status === 0,
+      })}
+    >
+      {/* STT */}
+      <td width={"50px"} className="">
+        {index+1}
+      </td>
+      {/* User ava */}
+      
+      <td className="pl-0" width={"100px"}>
+        <div className="d-flex align-items-center justify-content-center">
+          <img
+            src={user.user_ava}
+            alt=""
+            className="user_img"
+          />
+        </div>
+      </td>
+      {/* User name */}
+      <td width={"100px"} className="">
+        <div className="d-flex align-items-center justify-content-center">
+          <a href="/#" className="name">
+            {user.name}
+          </a>
+        </div>
+      </td>
+      {/* user Email */}
+      <td width={"120px"} className="">
+        {user.password}
+      </td>
+      {/* user Email */}
+      <td width={"150px"} className="">
+        {user.email}
+      </td>
+      {/* phone */}
+      <td width={"100px"} className="">
+        {user.phone}
+      </td>
+      {/* User address */}
+      <td width={"150px"} className="">
+        {user.user_address}
+      </td>
+      {/* User join date */}
+      <td width={"130px"} className="">
+        {user.join_date}
+      </td>
+
+      <td width={"100px"}>
+        <label className="custom-control ios-switch">
+          <input
+            onClick={(e) => handleClickTogle(e, user)}
+            type="checkbox"
+            className="ios-switch-control-input"
+            defaultChecked={
+              parseInt(user.user_status) > 0 ? true : false
+            }
+          />
+          <span
+            className="ios-switch-control-indicator"
+            defaultChecked={
+              parseInt(user.user_status) > 0 ? true : false
+            }
+          />
+        </label>
+      </td>
+      <td className="">
+        <button
+          type="button"
+          onClick={() => {
+            handleEditClick(user);
+          }}
+          className="btn btn-info"
+        >
+          Edit
+        </button>
+        <button
+          onClick={() => {
+            handleRemoveClick(user);
+          }}
+          type="button"
+          className="btn btn-danger"
+        >
+          Remove
+        </button>
+      </td>
+    </tr>
+  ))
 
   return (
     <>
@@ -71,72 +167,22 @@ export default function TableDataCategories({
         <table className="table table-striped custom-table">
           <thead>
             <tr>
+              <th scope="col">STT</th>
+              <th scope="col">User Ava</th>
               <th scope="col">Name</th>
-              <th scope="col">Status</th>
-              <th scope="col">Action</th>
+              <th scope="col">password</th>
+              <th scope="col">Email</th>
+              <th scope="col">Phone</th>
+              <th scope="col">User address</th>
+              <th scope="col">User join date</th>
               <th scope="col">status</th>
+              <th scope="col">action</th>
             </tr>
           </thead>
           <tbody>
-            {categories.map((category, index) => (
-              <tr
-                key={index}
-                className={classNames("table-row", {
-                  active: category.status === 0,
-                })}
-              >
-                <td width={"300px"} className="">
-                  <div className="d-flex align-items-center justify-content-center">
-                    <a href="/#" className="name">
-                      {category.category_name}
-                    </a>
-                  </div>
-                </td>
-                <td width={"100px"} className="">
-                  {category.status}
-                </td>
 
-                <td className="">
-                  <button
-                    type="button"
-                    onClick={() => {
-                      handleEditClick(category);
-                    }}
-                    className="btn btn-info"
-                  >
-                    Edit
-                  </button>
-                  <button
-                    onClick={() => {
-                      handleRemoveClick(category);
-                    }}
-                    type="button"
-                    className="btn btn-danger"
-                  >
-                    Remove
-                  </button>
-                </td>
-
-                <td>
-                  <label className="custom-control ios-switch">
-                    <input
-                      onClick={(e) => handleClickTogle(e, category)}
-                      type="checkbox"
-                      className="ios-switch-control-input"
-                      defaultChecked={
-                        parseInt(category.status) > 0 ? true : false
-                      }
-                    />
-                    <span
-                      className="ios-switch-control-indicator"
-                      defaultChecked={
-                        parseInt(category.status) > 0 ? true : false
-                      }
-                    />
-                  </label>
-                </td>
-              </tr>
-            ))}
+            {renderProduct}
+            
           </tbody>
         </table>
       </div>

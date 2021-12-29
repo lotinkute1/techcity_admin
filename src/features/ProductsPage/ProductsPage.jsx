@@ -61,7 +61,6 @@ function ProductsPage(props) {
       notify("success", "Thêm thành công !");
     }
 
-    console.log(formValue);
   };
 
   const handleEditClick = (productId) => {

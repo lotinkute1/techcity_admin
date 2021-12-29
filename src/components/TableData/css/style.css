@@ -269,6 +269,12 @@ td {
   height: var(--square) !important;
   border-radius: 8px;
 }
+.user_img {
+  --square: 50px;
+  width: var(--square) !important;
+  height: var(--square) !important;
+  border-radius: 50%;
+}
 .pt-84 {
   padding-top: 84px !important;
 }

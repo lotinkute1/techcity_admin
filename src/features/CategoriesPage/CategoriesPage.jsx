@@ -73,7 +73,7 @@ function CategoriesPage(props) {
   };
 
   const handleToggleBtn = (category) => {
-    console.log(category);
+    // console.log(category);
     if (category.status === 0) {
       set(ref(db, "/categories/" + category.id), {
         category_name: category.category_name,
