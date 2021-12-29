@@ -79,7 +79,7 @@ export default function TableDataCategories({
               <>
                 <tr
                   key={index}
-                  className={classNames("table-row", {
+                  className= {classNames("table-row", {
                     active: category.status === 0,
                   })}
                 >
