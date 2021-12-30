@@ -1,52 +1,88 @@
-import { getDatabase, ref, set } from "firebase/database";
+import { getDatabase, ref, remove, set } from "firebase/database";
 import React, { useState } from "react";
+import { toast, ToastContainer } from "react-toastify";
 import { v4 as uuidv4 } from "uuid";
-
+import "./css/style.css";
 // import TableData from "../../components/TableData/TableData";
 import TableDataUsers from "../../components/TableData/TableDataUsers";
 import FormInput from "./components/FormInput";
 export default function UsersPage() {
   const db = getDatabase();
   const [openForm, setOpenForm] = useState(false);
-  const [statusBtn, setStatusBtn] = useState(true);//trặng thái thêm/sửa
-  const [productId, setProductId] = useState(0);
-  
+  const [userId, setUsertId] = useState(0);
+  const [statusBtn, setStatusBtn] = useState(true);//thay đổi trạng thái button trong form thái thêm/sửa
+  const notify = (type, message) =>
+    toast[type](message, {
+      position: "top-right",
+      autoClose: 3000,
+      hideProgressBar: false,
+      closeOnClick: true,
+      pauseOnHover: true,
+      draggable: true,
+      progress: undefined,
+    });
+  // dùng để toggle form , reset id về 0 , đổi trạng thái button thành thêm (không chuyền đi đâu hết)
   const handleClickOpenForm = (e, formValue) => {
     setOpenForm((x) => !x);
-    setProductId(0);
+    setUsertId(0);
     setStatusBtn(true);
   };
-  // click nút edit thì mở form
+  
+  // lấy ra id , đổi trạng thái button thành sửa (chuyền cho dataTable)
+  const handleEditClick = (userId) => {
+    setUsertId(userId);
+    setStatusBtn(false);
+  };
+
+  // click nút edit trong bảng thì mở form (chuyền cho dataTable)
   const handleEditClickOpenForm = () => {
     setOpenForm(true);
   };
-  const handleAddBtn = (formValue) => {
-    if (
-      formValue.email !== "" &&
-      formValue.join_date !== "" &&
-      formValue.name !== "" &&
-      formValue.passowrd !== "" &&
-      formValue.phone !== "" &&
-      formValue.user_address !== "" &&
-      formValue.user_ava !== "" &&
-      formValue.user_status !== ""&&
-      formValue.user_type !== ""
-    ) {
-      set(ref(db, "users/" + uuidv4()), {
-        email: formValue.email.trim(),
-        join_date: formValue.join_date.trim(),
-        name: formValue.name.trim(),
-        passowrd:  formValue.passowrd.trim() ,
-        phone: formValue.phone.trim(),
-        user_address: formValue.user_address.trim(),
-        user_ava: formValue.user_ava.trim(),
-        user_status: formValue.user_status.trim(),
-        user_type: formValue.user_type.trim(),
-      });
-      // notify("success", "Thêm thành công !");
+  // xóa user handler
+  const handleRemoveClick = (userId) => {
+    console.log(userId);
+    if (window.confirm("Bạn thực sự muốn xóa ?")) {
+      remove(ref(db, "/users/" + userId));
+      notify("info", "Xóa thành công !");
+    } else {
+      // Do nothing!
+      console.log("Thing was not saved to the database.");
     }
+  };
+
+  // thêm user handler
+  const handleAddBtn = (formValue) => {
+    console.log("thong tin can add la:");
+    console.log(formValue);
+    // if (
+    //   formValue.email !== "" &&
+    //   formValue.join_date !== "" &&
+    //   formValue.name !== "" &&
+    //   formValue.passowrd !== "" &&
+    //   formValue.phone !== "" &&
+    //   formValue.user_address !== "" &&
+    //   formValue.user_ava !== "" &&
+    //   formValue.user_status !== ""&&
+    //   formValue.user_type !== ""
+    // ) {
+    //   set(ref(db, "users/" + uuidv4()), {
+    //     email: formValue.email.trim(),
+    //     join_date: formValue.join_date.trim(),
+    //     name: formValue.name.trim(),
+    //     passowrd:  formValue.passowrd.trim() ,
+    //     phone: formValue.phone.trim(),
+    //     user_address: formValue.user_address.trim(),
+    //     user_ava: formValue.user_ava.trim(),
+    //     user_status: formValue.user_status.trim(),
+    //     user_type: formValue.user_type.trim(),
+    //   });
+    //   notify("success", "Thêm thành công !");
+    // }
 
   };
+
+
+
   // tắt bặt trạng thái người dùng
   const handleToggleBtn = (user) => {
     const { id, user_status, ...u } = user;
@@ -62,6 +98,26 @@ export default function UsersPage() {
       });
     }
   };
+  // bấm nút save (edit) trong form
+  const handleSaveBtn = (formValue) => {
+    console.log("thong tin can edit la");
+    console.log(formValue);
+    // if (
+    //   userId &&
+    //   formValue.email !== "" &&
+    //   formValue.join_date !== "" &&
+    //   formValue.name !== "" &&
+    //   formValue.passowrd !== "" &&
+    //   formValue.phone !== "" &&
+    //   formValue.user_address !== "" &&
+    //   formValue.user_ava !== "" &&
+    //   formValue.user_status !== ""&&
+    //   formValue.user_type !== ""
+    // ) {
+    //   set(ref(db, "/user/" + userId), { ...formValue });
+    //   notify("success", "Sửa thành công !");
+    // }
+  };
   return (
     <>
       {/* Page Heading */}
@@ -76,10 +132,10 @@ export default function UsersPage() {
               <div className="row g-3 mb-2 ">
                 <FormInput
                   statusBtn={statusBtn}
-                  onClick={handleEditClickOpenForm}
-                  // productId={productId}
+                  // onClick={handleEditClickOpenForm}
+                  userId={userId}
                   onAddBtn={handleAddBtn}
-                  // onSaveBtn={handleSaveBtn}
+                  onSaveBtn={handleSaveBtn}
                 />
               </div>
             </>
@@ -98,14 +154,26 @@ export default function UsersPage() {
           </div>
           <div className="card shadow mb-4">
             <TableDataUsers
-              // onClick={handleEditClickOpenForm}
-              // onEditClick={handleEditClick}
-              // onRemoveClick={handleRemoveClick}
+              onClick={handleEditClickOpenForm}
+              onEditClick={handleEditClick}
+              onRemoveClick={handleRemoveClick}
               onToggleBtn={handleToggleBtn}
             />
           </div>
         </div>
       </div>
+      <ToastContainer
+        position="top-right"
+        autoClose={3000}
+        hideProgressBar
+        newestOnTop={false}
+        closeOnClick
+        rtl={false}
+        pauseOnFocusLoss={false}
+        draggable
+        pauseOnHover
+        theme="colored"
+      />
     </>
   );
 }

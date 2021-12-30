@@ -12,62 +12,48 @@ FormInput.propTypes = {
 function FormInput({
   onAddBtn = null,
   onSaveBtn = null,
-  onClick = null,
-  productId,
+  // onClick = null,
+  userId,
   statusBtn = true,
 }) {
   const initialFormData = Object.freeze({
-    product_name: "",
-    number: "",
-    default_price: "",
-    ship_id: "",
-    description: "",
-    main_img: "",
-    category_id: "",
-    user_id: "",
+    email: "",
+    join_date: "",
+    name: "",
+    passowrd: "",
+    phone: "",
+    user_address: "",
+    user_ava: "",
+    user_status: 1,
+    user_type: "",
   });
 
   const [formValue, setFormValue] = useState(initialFormData);
-  const [categoryIds, setCategoryIds] = useState([]);
   const [userIds, setUserIds] = useState([]);
   const db = getDatabase();
 
   // need change
   useEffect(() => {
-    console.log(productId);
+    console.log(userId);
     (() => {
-      const productRef = ref(db, "products/" + productId);
+      const productRef = ref(db, "users/" + userId);
       onValue(productRef, (snapshot) => {
         setFormValue(snapshot.val());
       });
     })();
-  }, [productId]);
+  }, [userId]);
 
-  useEffect(() => {
-    (() => {
-      const categoryRef = ref(db, "categories");
-      onValue(categoryRef, (snapshot) => {
-        const newCategoryIds = [...categoryIds];
-        for (const id in snapshot.val()) {
-          newCategoryIds.push({
-            id,
-          });
-        }
-        setCategoryIds([...newCategoryIds]);
-      });
-    })();
-  }, []);
-
+  // lấy ra danh sach user
   useEffect(() => {
     (() => {
       const userRef = ref(db, "users");
       onValue(userRef, (snapshot) => {
-        const newUserid = [...userIds];
-        for (const id in snapshot.val()) {
+        const newUserid = [];
+        snapshot.forEach((item) => {
           newUserid.push({
-            id,
+            user_type: item.val().user_type,
           });
-        }
+        });
         setUserIds([...newUserid]);
       });
     })();
@@ -100,55 +86,90 @@ function FormInput({
     setFormValue(initialFormData);
   };
 
+  function formatDate(date="") {
+    return date.split("/").reverse().join("-");
+
+  }
   console.log(formValue);
   return (
-    <>
-      <form className="container">
+    <div className="card shadow mb-4 px-3 pt-3">
+      <form className="container-fluid px-0">
         <div className="form-group row">
+          {/* input user name */}
           <div className="col-sm fw-bold">
-            <label htmlFor="name">Name</label>
+            <label htmlFor="name">User name</label>
             <input
               className="form-control"
               id="name"
               type="text"
-              name="product_name"
-              value={formValue?.product_name || ""}
+              name="name"
+              value={formValue?.name || ""}
               onChange={(e) => handleInputChange(e)}
             />
           </div>
+          {/* user password */}
           <div className="col-sm fw-bold">
-            <label htmlFor="price">Price</label>
+            <label htmlFor="price">password</label>
             <input
               className="form-control"
-              id="price"
-              type="text"
-              name="default_price"
-              value={formValue?.default_price || ""}
+              id="password"
+              type="password"
+              name="password"
+              autoComplete="on"
+              value={formValue?.password || ""}
               onChange={(e) => handleInputChange(e)}
             />
           </div>
         </div>
 
         <div className="form-group row mt-2">
+          {/* email */}
           <div className="col-sm fw-bold">
-            <label htmlFor="quantity">Quantity</label>
+            <label htmlFor="quantity">email</label>
             <input
               className="form-control"
-              id="quantity"
+              id="email"
               type="text"
-              name="number"
-              value={formValue?.number || ""}
+              name="email"
+              value={formValue?.email || ""}
               onChange={(e) => handleInputChange(e)}
             />
           </div>
+          {/* user phone */}
           <div className="col-sm fw-bold">
-            <label htmlFor="ship_id">Ship_id</label>
+            <label htmlFor="ship_id">phone</label>
             <input
               className="form-control"
-              id="ship_id"
+              id="phone"
               type="text"
-              name="ship_id"
-              value={formValue?.ship_id || ""}
+              name="phone"
+              value={formValue?.phone || ""}
+              onChange={(e) => handleInputChange(e)}
+            />
+          </div>
+        </div>
+        <div className="form-group row mt-2">
+          {/* user address */}
+          <div className="col-sm fw-bold">
+            <label htmlFor="quantity">user_address</label>
+            <input
+              className="form-control"
+              id="user_address"
+              type="text"
+              name="user_address"
+              value={formValue?.user_address || ""}
+              onChange={(e) => handleInputChange(e)}
+            />
+          </div>
+          {/* user join date */}
+          <div className="col-sm fw-bold">
+            <label htmlFor="ship_id">join_date</label>
+            <input
+              className="form-control"
+              id="join_date"
+              type="date"
+              name="join_date"
+              value={formatDate(formValue?.join_date)}
               onChange={(e) => handleInputChange(e)}
             />
           </div>
@@ -157,74 +178,47 @@ function FormInput({
         {/*  */}
         <div className="form-group row mt-2">
           <div className="col-sm fw-bold">
-            <label htmlFor="category_id">Category_ID: </label>
-            <select
-              className="select-input"
-              name="category_id"
-              id="category_id"
-              onChange={(e) => handleInputChange(e)}
-            >
-              <option value="">--Chọn ID--</option>
-              {categoryIds.map((item) => (
-                <option
-                  key={item.id}
-                  value={item.id}
-                  selected={item.id === formValue?.category_id}
-                >
-                  {item.id}
-                </option>
-              ))}
-            </select>
-          </div>
-          <div className="col-sm fw-bold">
             <label htmlFor="user_id">User_ID: </label>
             <select
               className="select-input"
               name="user_id"
               id="user_id"
               onChange={(e) => handleInputChange(e)}
+              value={formValue?.user_type}
             >
               <option value="">--Chọn ID--</option>
 
-              {userIds.map((item) => (
-                <option
-                  key={item.id}
-                  selected={item.id === formValue?.user_id}
-                  value={item.id}
-                >
-                  {item.id}
+              {userIds.map((item, index) => (
+                <option key={index} value={item.user_type}>
+                  {item.user_type}
                 </option>
               ))}
             </select>
           </div>
         </div>
-
-        <div className="form-group row mt-2">
-          <div className="col-sm fw-bold">
-            <label htmlFor="description">Description</label>
-            <textarea
-              className="form-control rounded-3"
-              id="description"
-              rows="5"
-              name="description"
-              value={formValue?.description || ""}
-              onChange={(e) => handleInputChange(e)}
-            ></textarea>
-          </div>
-        </div>
       </form>
 
-      <p className="form-label  mb-0 fw-bold">Images</p>
+      <p className="form-label  mb-0 fw-bold">user_ava</p>
+      <div className="user_ava_preview">
+        <img
+          src={
+            formValue?.user_ava ??
+            "https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcQwbGozsS9QP10p16rZiCrQD0koXVkI4c7LwUHab9dkmFRcN0VqCkB37f2y0EnySItwykg&usqp=CAU"
+          }
+          alt=""
+        />
+      </div>
       <input
         className="form-control mt-2 mb-3"
-        id="ship_id"
+        id="user_ava"
         type="text"
         placeholder="URL image"
-        name="main_img"
+        name="user_ava"
+        value={formValue?.user_ava || ""}
         onChange={(e) => handleInputChange(e)}
       />
 
-      <div className="row g-3 mb-5 ">
+      <div className="row g-3 my-3 px-2">
         <div className="col mt-0 p-0 text-end">
           {statusBtn ? (
             <button
@@ -245,7 +239,7 @@ function FormInput({
           )}
         </div>
       </div>
-    </>
+    </div>
   );
 }
 

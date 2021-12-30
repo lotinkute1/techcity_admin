@@ -274,6 +274,7 @@ td {
   width: var(--square) !important;
   height: var(--square) !important;
   border-radius: 50%;
+  position: relative;
 }
 .pt-84 {
   padding-top: 84px !important;

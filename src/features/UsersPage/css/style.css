@@ -1,0 +1,48 @@
+.user_img_wrapper{
+    position:relative;
+}
+.user_img_wrapper.type--admin::before{
+    content: "admin";
+    position:absolute;
+    bottom:-10px;
+    left: 50%;
+    padding:2px 5px;
+    transform: translateX(-50%);
+    background-color:orangered;
+    color: white;
+    border-radius:5px;
+    font-size:10px;
+    font-weight:bold;
+    z-index: 1;
+}
+.user_img_wrapper.type--customer::before{
+    content: "customer";
+    position:absolute;
+    bottom:-10px;
+    left: 50%;
+    padding:2px 5px;
+    transform: translateX(-50%);
+    background-color:rgb(105, 211, 0);
+    color: white;
+    border-radius:5px;
+    font-size:10px;
+    font-weight:bold;
+    z-index: 1;
+}
+.user_img_wrapper.type--supplier::before{
+    content: "supplier";
+    position:absolute;
+    bottom:-10px;
+    left: 50%;
+    padding:2px 5px;
+    transform: translateX(-50%);
+    background-color:lightcoral;
+    color: white;
+    border-radius:5px;
+    font-size:10px;
+    font-weight:bold;
+    z-index: 1;
+}
+.user_ava_preview{
+    width: 100px;
+}
