@@ -55,6 +55,7 @@ export default function TableDataProduct({
             description: item.val().description,
             category_id: item.val().category_id,
             user_id: item.val().user_id,
+            brand: item.val().brand,
           });
         });
 

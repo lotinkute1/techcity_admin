@@ -46,7 +46,8 @@ function ProductsPage(props) {
       formValue.ship_id !== "" &&
       formValue.description !== "" &&
       formValue.category_id !== "" &&
-      formValue.user_id !== ""
+      formValue.user_id !== "" &&
+      formValue.brand !== ""
     ) {
       set(ref(db, "products/" + uuidv4()), {
         product_name: formValue.product_name.trim(),
@@ -57,10 +58,10 @@ function ProductsPage(props) {
         description: formValue.description.trim(),
         category_id: formValue.category_id.trim(),
         user_id: formValue.user_id.trim(),
+        brand: formValue.brand.trim(),
       });
       notify("success", "Thêm thành công !");
     }
-
   };
 
   const handleEditClick = (productId) => {
@@ -88,7 +89,8 @@ function ProductsPage(props) {
       formValue.ship_id !== "" &&
       formValue.description !== "" &&
       formValue.category_id !== "" &&
-      formValue.user_id !== ""
+      formValue.user_id !== "" &&
+      formValue.brand !== ""
     ) {
       set(ref(db, "/products/" + productId), { ...formValue });
       notify("success", "Sửa thành công !");

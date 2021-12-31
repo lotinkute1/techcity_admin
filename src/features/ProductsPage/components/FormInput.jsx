@@ -26,6 +26,7 @@ function FormInput({
     main_img: "",
     category_id: "",
     user_id: "",
+    brand: "",
   });
 
   const [formValue, setFormValue] = useState(initialFormData);
@@ -42,6 +43,7 @@ function FormInput({
         let data = {};
         if (snapshot.val()) {
           const {
+            brand,
             category_id,
             default_price,
             description,
@@ -53,6 +55,7 @@ function FormInput({
           } = snapshot.val();
 
           data = {
+            brand,
             category_id,
             default_price,
             description,
@@ -77,6 +80,7 @@ function FormInput({
           main_img: data.main_img,
           category_id: data.category_id,
           user_id: data.user_id,
+          brand: data.brand,
         });
       });
     })();
@@ -214,7 +218,6 @@ function FormInput({
           </div>
         </div>
 
-        {/*  */}
         <div className="form-group row mt-2">
           <div className="col-sm fw-bold">
             <label htmlFor="category_id">Category_ID: </label>
@@ -253,6 +256,21 @@ function FormInput({
           </div>
         </div>
 
+        {/*  */}
+        <div className="form-group row mt-2">
+          <div className="col-sm fw-bold">
+            <label htmlFor="brand">Brand: </label>
+            <input
+              className="form-control"
+              id="brand"
+              type="text"
+              name="brand"
+              value={formValue?.brand || ""}
+              onChange={(e) => handleInputChange(e)}
+            />
+          </div>
+        </div>
+        {/*  */}
         <div className="form-group row mt-2">
           <div className="col-sm fw-bold">
             <label htmlFor="description">Description</label>
