@@ -86,9 +86,8 @@ function FormInput({
     setFormValue(initialFormData);
   };
 
-  function formatDate(date="") {
+  function formatDate(date = "") {
     return date.split("/").reverse().join("-");
-
   }
   console.log(formValue);
   return (

@@ -31,15 +31,53 @@ function FormInput({
   const [formValue, setFormValue] = useState(initialFormData);
   const [categoryIds, setCategoryIds] = useState([]);
   const [userIds, setUserIds] = useState([]);
+  const [shipIds, setShipIds] = useState([]);
   const db = getDatabase();
 
   // need change
   useEffect(() => {
-    console.log(productId);
     (() => {
       const productRef = ref(db, "products/" + productId);
       onValue(productRef, (snapshot) => {
-        setFormValue(snapshot.val());
+        let data = {};
+        if (snapshot.val()) {
+          const {
+            category_id,
+            default_price,
+            description,
+            number,
+            product_img,
+            product_name,
+            ship_id,
+            user_id,
+          } = snapshot.val();
+
+          data = {
+            category_id,
+            default_price,
+            description,
+            number,
+            product_img,
+            product_name,
+            ship_id,
+            user_id,
+          };
+        }
+        if (data.product_img) {
+          const { main_img } = data.product_img;
+          data = { ...data, main_img };
+        }
+        setFormValue({
+          product_name: data.product_name,
+          number: data.number,
+          default_price: data.default_price,
+          ship_id: data.ship_id,
+          description: data.description,
+          product_img: data.product_img,
+          main_img: data.main_img,
+          category_id: data.category_id,
+          user_id: data.user_id,
+        });
       });
     })();
   }, [productId]);
@@ -70,6 +108,21 @@ function FormInput({
           });
         }
         setUserIds([...newUserid]);
+      });
+    })();
+  }, []);
+
+  useEffect(() => {
+    (() => {
+      const userRef = ref(db, "ships");
+      onValue(userRef, (snapshot) => {
+        const newShipid = [...shipIds];
+        for (const id in snapshot.val()) {
+          newShipid.push({
+            id,
+          });
+        }
+        setShipIds([...newShipid]);
       });
     })();
   }, []);
@@ -143,15 +196,21 @@ function FormInput({
             />
           </div>
           <div className="col-sm fw-bold">
-            <label htmlFor="ship_id">Ship_id</label>
-            <input
-              className="form-control"
-              id="ship_id"
-              type="text"
+            <label htmlFor="category_id">Ship_ID: </label>
+            <select
+              className="select-input"
               name="ship_id"
-              value={formValue?.ship_id || ""}
+              id="ship_id"
               onChange={(e) => handleInputChange(e)}
-            />
+              value={formValue?.ship_id}
+            >
+              <option value="">--Chọn ID--</option>
+              {shipIds.map((item) => (
+                <option key={item.id} value={item.id}>
+                  {item.id}
+                </option>
+              ))}
+            </select>
           </div>
         </div>
 
@@ -164,14 +223,11 @@ function FormInput({
               name="category_id"
               id="category_id"
               onChange={(e) => handleInputChange(e)}
+              value={formValue?.category_id}
             >
               <option value="">--Chọn ID--</option>
               {categoryIds.map((item) => (
-                <option
-                  key={item.id}
-                  value={item.id}
-                  selected={item.id === formValue?.category_id}
-                >
+                <option key={item.id} value={item.id}>
                   {item.id}
                 </option>
               ))}
@@ -184,15 +240,12 @@ function FormInput({
               name="user_id"
               id="user_id"
               onChange={(e) => handleInputChange(e)}
+              value={formValue?.user_id}
             >
               <option value="">--Chọn ID--</option>
 
-              {userIds.map((item) => (
-                <option
-                  key={item.id}
-                  selected={item.id === formValue?.user_id}
-                  value={item.id}
-                >
+              {userIds.map((item, index) => (
+                <option key={item.id} value={item.id}>
                   {item.id}
                 </option>
               ))}
@@ -218,10 +271,11 @@ function FormInput({
       <p className="form-label  mb-0 fw-bold">Images</p>
       <input
         className="form-control mt-2 mb-3"
-        id="ship_id"
+        id="main_img"
         type="text"
         placeholder="URL image"
         name="main_img"
+        value={formValue?.main_img || ""}
         onChange={(e) => handleInputChange(e)}
       />
 
