@@ -49,36 +49,35 @@ export default function UsersPage() {
       console.log("Thing was not saved to the database.");
     }
   };
-
+  
   // thêm user handler
   const handleAddBtn = (formValue) => {
     console.log("thong tin can add la:");
     console.log(formValue);
-    // if (
-    //   formValue.email !== "" &&
-    //   formValue.join_date !== "" &&
-    //   formValue.name !== "" &&
-    //   formValue.passowrd !== "" &&
-    //   formValue.phone !== "" &&
-    //   formValue.user_address !== "" &&
-    //   formValue.user_ava !== "" &&
-    //   formValue.user_status !== ""&&
-    //   formValue.user_type !== ""
-    // ) {
-    //   set(ref(db, "users/" + uuidv4()), {
-    //     email: formValue.email.trim(),
-    //     join_date: formValue.join_date.trim(),
-    //     name: formValue.name.trim(),
-    //     passowrd:  formValue.passowrd.trim() ,
-    //     phone: formValue.phone.trim(),
-    //     user_address: formValue.user_address.trim(),
-    //     user_ava: formValue.user_ava.trim(),
-    //     user_status: formValue.user_status.trim(),
-    //     user_type: formValue.user_type.trim(),
-    //   });
-    //   notify("success", "Thêm thành công !");
-    // }
-
+    if (
+      formValue.email !== "" &&
+      formValue.join_date !== "" &&
+      formValue.name !== "" &&
+      formValue.passowrd !== "" &&
+      formValue.phone !== "" &&
+      formValue.user_address !== "" &&
+      formValue.user_ava !== "" &&
+      formValue.user_type !== ""
+    ) {
+      set(ref(db, "users/" + uuidv4()), {
+        email: formValue.email.trim(),
+        join_date: formValue?.join_date?.trim(),
+        name: formValue.name?.trim(),
+        password:  formValue.password?.trim() ,
+        phone: formValue.phone?.trim(),
+        user_address: formValue.user_address?.trim(),
+        user_ava: formValue.user_ava?.trim(),
+        user_status: 1,
+        user_type:Number( formValue.user_type?.trim()),
+      });
+      notify("success", "Thêm thành công !");
+    }
+    // handleClickOpenForm();
   };
 
 
@@ -102,21 +101,24 @@ export default function UsersPage() {
   const handleSaveBtn = (formValue) => {
     console.log("thong tin can edit la");
     console.log(formValue);
-    // if (
-    //   userId &&
-    //   formValue.email !== "" &&
-    //   formValue.join_date !== "" &&
-    //   formValue.name !== "" &&
-    //   formValue.passowrd !== "" &&
-    //   formValue.phone !== "" &&
-    //   formValue.user_address !== "" &&
-    //   formValue.user_ava !== "" &&
-    //   formValue.user_status !== ""&&
-    //   formValue.user_type !== ""
-    // ) {
-    //   set(ref(db, "/user/" + userId), { ...formValue });
-    //   notify("success", "Sửa thành công !");
-    // }
+    console.log(userId);
+    if (
+      userId &&
+      formValue.email !== "" &&
+      formValue.join_date !== "" &&
+      formValue.name !== "" &&
+      formValue.passowrd !== "" &&
+      formValue.phone !== "" &&
+      formValue.user_address !== "" &&
+      formValue.user_ava !== "" &&
+      formValue.user_status !== ""&&
+      formValue.user_type !== ""
+    ) {
+      set(ref(db, "/users/" + userId), { ...formValue });
+      notify("success", "Sửa thành công !");
+    }
+    handleClickOpenForm();
+
   };
   return (
     <>

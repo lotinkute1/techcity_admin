@@ -24,28 +24,33 @@ function FormInput({
     phone: "",
     user_address: "",
     user_ava: "",
-    user_status: 1,
+    user_status: "",
     user_type: "",
   });
 
   const [formValue, setFormValue] = useState(initialFormData);
   const [userIds, setUserIds] = useState([]);
   const db = getDatabase();
-
+  
   // need change
   useEffect(() => {
-    console.log(userId);
+    let isMounted = true;
     (() => {
+
       const productRef = ref(db, "users/" + userId);
       onValue(productRef, (snapshot) => {
-        setFormValue(snapshot.val());
+        if(isMounted) setFormValue(snapshot.val());
       });
     })();
+    return ()=> {isMounted = false};
+
   }, [userId]);
 
   // lấy ra danh sach user
   useEffect(() => {
+    let isMounted = true;
     (() => {
+      
       const userRef = ref(db, "users");
       onValue(userRef, (snapshot) => {
         const newUserid = [];
@@ -54,16 +59,26 @@ function FormInput({
             user_type: item.val().user_type,
           });
         });
-        setUserIds([...newUserid]);
+        if(isMounted) setUserIds([...newUserid]);
+        
       });
     })();
+    return ()=> {isMounted = false};
   }, []);
 
   const handleInputChange = (e) => {
-    setFormValue({
-      ...formValue,
-      [e.target.name]: e.target.value,
-    });
+    if(e.target.name==="join_date") {
+      setFormValue({
+        ...formValue,
+        [e.target.name]: formatDate2(e.target.value),
+      });
+    }else{
+
+      setFormValue({
+        ...formValue,
+        [e.target.name]: e.target.value,
+      });
+    }
   };
 
   const handleAddClick = (e) => {
@@ -86,9 +101,26 @@ function FormInput({
     setFormValue(initialFormData);
   };
 
-  function formatDate(date="") {
+  function formatDate(date="") {//thay đỏi format date từ firebase vào input (dd/mm/yyyy to yyyy-mm-dd)
     return date.split("/").reverse().join("-");
 
+  }
+  function formatDate2(date="") {//thay đỏi format date từ input sang firebase (yyyy-mm-dd to dd/mm/yyyy)
+    return date.split("-").reverse().join("/");
+
+  }
+  const renderOptions = ()=>{
+    let userTypeArr=[];
+    return userIds.map((item, index) =>{
+      if(!userTypeArr.includes(item.user_type)){
+        userTypeArr.push(item.user_type);
+        return (
+          <option key={index} value={item.user_type}>
+            {item.user_type===1?"admin":(item.user_type===2?"supplier":"user")}
+          </option>
+        )
+      }else return null;
+    })
   }
   console.log(formValue);
   return (
@@ -113,9 +145,9 @@ function FormInput({
             <input
               className="form-control"
               id="password"
-              type="password"
+              type="text"
               name="password"
-              autoComplete="on"
+              // autoComplete="on"
               value={formValue?.password || ""}
               onChange={(e) => handleInputChange(e)}
             />
@@ -178,21 +210,17 @@ function FormInput({
         {/*  */}
         <div className="form-group row mt-2">
           <div className="col-sm fw-bold">
-            <label htmlFor="user_id">User_ID: </label>
+            <label htmlFor="user_id">User_Type: </label>
             <select
               className="select-input"
-              name="user_id"
-              id="user_id"
+              name="user_type"
+              id="user_type"
               onChange={(e) => handleInputChange(e)}
               value={formValue?.user_type}
             >
-              <option value="">--Chọn ID--</option>
-
-              {userIds.map((item, index) => (
-                <option key={index} value={item.user_type}>
-                  {item.user_type}
-                </option>
-              ))}
+              <option value="">--Chọn Type--</option>
+              {renderOptions()}
+              
             </select>
           </div>
         </div>
