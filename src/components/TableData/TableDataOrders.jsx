@@ -13,150 +13,103 @@ import "./fonts/icomoon/style.css";
 // import "./js/jquery-3.3.1.min.js";
 import "./js/main";
 
-TableDataUsers.propTypes = {
+TableDataOrders.propTypes = {
   onEditClick: PropTypes.func,
   onClick: PropTypes.func,
   onRemoveClick: PropTypes.func,
   onToggleBtn: PropTypes.func,
 };
-export default function TableDataUsers({
-  onEditClick = null,
-  onClick = null,
+export default function TableDataOrders({
   onRemoveClick = null,
   onToggleBtn = null,
 }) {
-  const [users, setUsers] = useState([]);
+  const [orders, setOrders] = useState([]);
   const db = getDatabase();
 
-  const handleClickTogle = (e, user) => {
-    const tableRowElement = e.target.closest(".table-row");
-    if (tableRowElement) {
-      tableRowElement.classList.toggle("active");
-    }
+  const handleClickTogle = ( order,status) => {
+    
     if (onToggleBtn) {
-      onToggleBtn(user);
+      onToggleBtn(order,status);
     }
   };
 
-  const handleEditClick = (category) => {
-    if (onClick) onClick();//để mở form input
-    if (onEditClick) onEditClick(category.id);//
-  };
-  const handleRemoveClick = (category) => {
-    if (onRemoveClick) onRemoveClick(category.id);
+  const handleRemoveClick = (order) => {
+    if (onRemoveClick) onRemoveClick(order.id);
   };
 
   useEffect(() => {
     (() => {
-      const categoryRef = ref(db, "users");
-      onValue(categoryRef, (snapshot) => {
-        const newCategories = [];
+      const odersRef = ref(db, "orders");
+      onValue(odersRef, (snapshot) => {
+        const temp = [];
         snapshot.forEach((item) => {
-          newCategories.push({
+          temp.push({
             id: item.key,
             ...item.val(),
           });
         });
-        setUsers([...newCategories]);
+        setOrders([...temp]);
       });
     })();
   }, []);
 
-  const userTypeCSS = (userType)=>{
-    const userTypec=Number(userType);
-    switch (userTypec) {
-      case 1:
-        return "type--admin";
-      case 2:
-        return "type--supplier";
-      case 3:
-        return "type--customer";
-      default:
-        return "";
-    }
-  }
-
-  const renderProduct = users.map((user, index) => (
+  const renderOrders = orders.map((order, index) => (
     <tr
       key={index}
-      className={classNames("table-row", {
-        active: user.user_status === 0,
-      })}
     >
-      {/* STT */}
-      <td width={"50px"} className="">
-        {index + 1}
-      </td>
-      {/* User ava */}
 
-      <td className="pl-0" width={"100px"}>
-        <div className="d-flex align-items-center justify-content-center">
-          <div className={"user_img_wrapper "+userTypeCSS(user.user_type)}>
-            <img src={user.user_ava} alt="" className="user_img " />
-          </div>
-        </div>
+      <td width={"80px"} className="">
+        {order.id}
       </td>
-      {/* User name */}
+
       <td width={"100px"} className="">
         <div className="d-flex align-items-center justify-content-center">
           <a href="/#" className="name">
-            {user.name}
+            {order.user_id}
           </a>
         </div>
       </td>
-      {/* user Email */}
+
       <td width={"120px"} className="">
-        {user.password}
-      </td>
-      {/* user Email */}
-      <td width={"150px"} className="">
-        {user.email}
-      </td>
-      {/* phone */}
-      <td width={"100px"} className="">
-        {user.phone}
-      </td>
-      {/* User address */}
-      <td width={"150px"} className="">
-        {user.user_address}
-      </td>
-      {/* User join date */}
-      <td width={"130px"} className="">
-        {user.join_date}
+        {order.receiver_name}
       </td>
 
-      <td width={"100px"}>
-        <label className="custom-control ios-switch">
-          <input
-            onClick={(e) => handleClickTogle(e, user)}
-            type="checkbox"
-            className="ios-switch-control-input"
-            defaultChecked={parseInt(user.user_status) > 0 ? true : false}
-          />
-          <span
-            className="ios-switch-control-indicator"
-            defaultChecked={parseInt(user.user_status) > 0 ? true : false}
-          />
-        </label>
+      <td width={"100px"} className="">
+        {order.receiver_location}
       </td>
-      <td className="">
+      
+
+      <td width={"200px"} className="">
+        <div className={"orders-btn-wrapper "+(order.status===0 ? "cancel" : (order.status===1?"progressing":"confirmed"))}>
+          <button type="button" className="btn btn-cancel" onClick={()=>handleClickTogle(order,0)}>
+            cancel
+          </button>
+          <button type="button" className="btn btn-progressing" onClick={()=>handleClickTogle(order,1)}>
+            progressing
+          </button>
+          <button type="button" className="btn btn-confirmed" onClick={()=>handleClickTogle(order,2)}>
+            confirmed
+          </button>
+        </div>
+      </td>
+      
+      <td width={"150px"} className="">
+        {order.total}
+      </td>
+
+      <td width={"130px"} className="">
+        {order.create_date}
+      </td>
+
+      <td width={"60px"} className="">
         <button
-          type="button"
           onClick={() => {
-            handleEditClick(user);
-          }}
-          className="btn btn-info"
-        >
-          Edit
-        </button>
-        <button
-          onClick={() => {
-            handleRemoveClick(user);
+            handleRemoveClick(order);
           }}
           type="button"
           className="btn btn-danger"
         >
-          Remove
+          X
         </button>
       </td>
     </tr>
@@ -168,19 +121,17 @@ export default function TableDataUsers({
         <table className="table table-striped custom-table">
           <thead>
             <tr>
-              <th scope="col">STT</th>
-              <th scope="col">User Ava</th>
-              <th scope="col">Name</th>
-              <th scope="col">password</th>
-              <th scope="col">Email</th>
-              <th scope="col">Phone</th>
-              <th scope="col">User address</th>
-              <th scope="col">User join date</th>
-              <th scope="col">status</th>
-              <th scope="col">action</th>
+              <th scope="col">Oder ID</th>
+              <th scope="col">User ID</th>
+              <th scope="col">receiver_name</th>
+              <th scope="col">receiver_location</th>
+              <th scope="col">Status</th>
+              <th scope="col">Total</th>
+              <th scope="col">Create Date</th>
+              <th scope="col">Action</th>
             </tr>
           </thead>
-          <tbody>{renderProduct}</tbody>
+          <tbody>{renderOrders}</tbody>
         </table>
       </div>
     </>

@@ -50,14 +50,14 @@ export default function TableDataUsers({
     (() => {
       const categoryRef = ref(db, "users");
       onValue(categoryRef, (snapshot) => {
-        const newCategories = [];
+        const temp = [];
         snapshot.forEach((item) => {
-          newCategories.push({
+          temp.push({
             id: item.key,
             ...item.val(),
           });
         });
-        setUsers([...newCategories]);
+        setUsers([...temp]);
       });
     })();
   }, []);
