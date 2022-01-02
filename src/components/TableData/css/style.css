@@ -279,6 +279,21 @@ td {
   border-radius: 50%;
   position: relative;
 }
+.banner_img {
+  width: 280px !important;
+  height: 130px !important;
+  border-radius: 5px;
+  overflow: hidden;
+  position: relative;
+
+}
+.banner_img img{
+  position: absolute;
+  top: 50%;
+  left: 0;  
+  transform: translateY(-50%);
+  
+}
 .pt-84 {
   padding-top: 84px !important;
 }

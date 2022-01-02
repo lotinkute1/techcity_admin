@@ -46,7 +46,7 @@ function FormInput({
 
   }, [userId]);
 
-  // lấy ra danh sach user
+  // lấy ra danh user type
   useEffect(() => {
     let isMounted = true;
     (() => {
