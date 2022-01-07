@@ -118,7 +118,7 @@ export default function Main() {
                 </div>
               </div> */}
               <div className="subnav__list">
-                <div onClick={handleLogout}>Logout</div>
+                <a href="http://localhost:3000/" onClick={handleLogout}>Quay về trang chủ</a >
               </div>
             </div>
           </div>

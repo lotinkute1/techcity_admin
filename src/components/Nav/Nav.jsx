@@ -16,19 +16,34 @@ export default function Nav() {
             <img src={logo} alt="" />
           </div>
           <div className="nav-bar__lists">
-            {currentUser?.user_type === 1 && (
+            {/* {currentUser?.user_type === 1 && (
               <Link to={`/${currentUser?.id}/AdminPage`}>
                 <div className="nav-bar__list">
                   <i className="fas fa-user-secret" /> admin{" "}
                 </div>
               </Link>
-            )}
-            {currentUser?.user_type === 1 && (
+            )} */}
+            {/* {currentUser?.user_type === 1 && (
               <Link to={`/${currentUser?.id}/OrdersPage`}>
                 <div className="nav-bar__list">
                   <i className="fas fa-shopping-cart" /> orders{" "}
                 </div>
               </Link>
+            )} */}
+            {currentUser?.user_type === 1 ? (
+              <Link to={`/${currentUser?.id}/OrdersPage`}>
+                <div className="nav-bar__list">
+                  <i className="fas fa-shopping-cart" /> orders
+                </div>
+              </Link>
+            ) : currentUser?.user_type === 2 ? (
+              <Link to={`/${currentUser?.id}/OrdersPage`}>
+                <div className="nav-bar__list">
+                  <i className="fas fa-shopping-cart" /> orders
+                </div>
+              </Link>
+            ) : (
+              ""
             )}
             {currentUser?.user_type === 1 ? (
               <Link to={`/${currentUser?.id}/ProductsPage`}>

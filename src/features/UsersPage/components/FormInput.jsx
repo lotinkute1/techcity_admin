@@ -101,11 +101,7 @@ function FormInput({
     setFormValue(initialFormData);
   };
 
-<<<<<<< HEAD
   function formatDate(date="") {//thay đỏi format date từ firebase vào input (dd/mm/yyyy to yyyy-mm-dd)
-=======
-  function formatDate(date = "") {
->>>>>>> a22cfae359363c89c36d235b856a7f6288abb652
     return date.split("/").reverse().join("-");
   }
   function formatDate2(date="") {//thay đỏi format date từ input sang firebase (yyyy-mm-dd to dd/mm/yyyy)
