@@ -10,7 +10,8 @@ export default function OrdersPage() {
     toast[type](message, {
       position: "top-right",
       autoClose: 3000,
-      hideProgressBar: false,
+      hideProgressBar:
+       false,
       closeOnClick: true,
       pauseOnHover: true,
       draggable: true,

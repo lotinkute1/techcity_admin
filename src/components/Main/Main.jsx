@@ -1,8 +1,32 @@
-import React from "react";
-
+import { getDatabase, onValue, ref } from "firebase/database";
+import React, { useEffect, useState } from "react";
+import { useParams } from "react-router-dom";
 import Router from "../../features/Router/Router";
 
 export default function Main() {
+  const db = getDatabase();
+  const [users, setUsers] = useState([]);
+  useEffect(() => {
+    (() => {
+      const categoryRef = ref(db, "users");
+      onValue(categoryRef, (snapshot) => {
+        const temp = [];
+        snapshot.forEach((item) => {
+          temp.push({
+            id: item.key,
+            ...item.val(),
+          });
+        });
+        setUsers([...temp]);
+      });
+    })();
+  }, []);
+
+  console.log(users);
+
+  let { id } = useParams();
+  console.log(id);
+
   return (
     <div className="col">
       {/* right container */}
@@ -56,7 +80,7 @@ export default function Main() {
           </div>
           <div className="container-fluid px-4">
             {/* main content here */}
-              <Router/>
+            <Router />
           </div>
         </div>
       </div>

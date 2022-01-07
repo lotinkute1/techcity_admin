@@ -16,7 +16,7 @@ export default function Router() {
         <Route path="/DiscountPage" element={<DiscountPage />}/>
         <Route path="/UsersPage" element={<UsersPage />} />
         <Route path="/CategoriesPage" element={<CategoriesPage />} />
-        <Route path="*" element={<AdminPage to="/AdminPage" />} />
+        <Route path="*/:id" element={<AdminPage to="/AdminPage" />} />
       </Routes>
     </>
   );
