@@ -1,11 +1,40 @@
 import { getDatabase, onValue, ref } from "firebase/database";
 import React, { useEffect, useState } from "react";
-import { useParams } from "react-router-dom";
+import { Link, useParams } from "react-router-dom";
+import { ToastContainer, toast } from "react-toastify";
+import "react-toastify/dist/ReactToastify.css";
+
+import StorageKeys from "../../constants";
 import Router from "../../features/Router/Router";
 
 export default function Main() {
   const db = getDatabase();
   const [users, setUsers] = useState([]);
+
+  const notify = (type, message) =>
+    toast[type](message, {
+      position: "top-right",
+      autoClose: 3000,
+      hideProgressBar: false,
+      closeOnClick: true,
+      pauseOnHover: true,
+      draggable: true,
+      progress: undefined,
+    });
+
+  let { id } = useParams();
+
+  let currenUser;
+
+  users.forEach((user) => {
+    if (id === user.id) {
+      currenUser = user;
+    }
+  });
+
+  if (currenUser) {
+    localStorage.setItem(StorageKeys.USER, JSON.stringify(currenUser));
+  }
   useEffect(() => {
     (() => {
       const categoryRef = ref(db, "users");
@@ -22,10 +51,14 @@ export default function Main() {
     })();
   }, []);
 
-  console.log(users);
+  if (currenUser) {
+    localStorage.setItem(StorageKeys.USER, JSON.stringify(currenUser));
+  }
 
-  let { id } = useParams();
-  console.log(id);
+  const handleLogout = () => {
+    localStorage.removeItem(StorageKeys.USER);
+    notify("success", "Đăng xuất thành công!");
+  };
 
   return (
     <div className="col">
@@ -55,26 +88,37 @@ export default function Main() {
                   <i className="fas fa-envelope" />
                 </a>
               </div>
-              <div className="content__nav__user">
+              {/* <div className="content__nav__user">
                 <div className="content__nav__user-wrapper">
                   <div className="content__nav__user-ava">
-                    <img src="https://i.imgflip.com/1tk4j3.jpg" alt="" />
+                    <img
+                      src={
+                        currenUser?.user_ava ||
+                        "https://static.thenounproject.com/png/363640-200.png"
+                      }
+                      alt=""
+                    />
                   </div>
-                  <div className="content__nav__user-name">Minh Huy</div>
+                  <div className="content__nav__user-name">
+                    {currenUser?.name}
+                  </div>
                 </div>
                 <div className="content__nav__user__subnav">
                   <div>
                     <div className="subnav__list">
-                      <a href="/#">Profile</a>{" "}
+                      <Link to={"/" + id}>Profile</Link>{" "}
                     </div>
                     <div className="subnav__list">
-                      <a href="/#">Settings</a>{" "}
+                      <Link to={"/" + id}>Settings</Link>{" "}
                     </div>
                     <div className="subnav__list">
-                      <a href="/#">Logout</a>{" "}
+                      <Link to={"/" + id}>Logout</Link>{" "}
                     </div>
                   </div>
                 </div>
+              </div> */}
+              <div className="subnav__list">
+                <div onClick={handleLogout}>Logout</div>
               </div>
             </div>
           </div>

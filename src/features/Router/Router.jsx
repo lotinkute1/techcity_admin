@@ -11,12 +11,12 @@ export default function Router() {
     <>
       <Routes>
         <Route path="/AdminPage" element={<AdminPage />} />
-        <Route path="/OrdersPage" element={<OrdersPage />} />
+        <Route path="OrdersPage" element={<OrdersPage />} />
         <Route path="/ProductsPage" element={<ProductsPage />} />
-        <Route path="/DiscountPage" element={<DiscountPage />}/>
+        <Route path="/DiscountPage" element={<DiscountPage />} />
         <Route path="/UsersPage" element={<UsersPage />} />
         <Route path="/CategoriesPage" element={<CategoriesPage />} />
-        <Route path="*/:id" element={<AdminPage to="/AdminPage" />} />
+        <Route path="*" element={<AdminPage to="/AdminPage" />} />
       </Routes>
     </>
   );

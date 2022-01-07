@@ -9,8 +9,10 @@ a:hover {
   color: black;
 }
 
-.btn:focus,.btn:active,.btn{
-  box-shadow: none !important; 
+.btn:focus,
+.btn:active,
+.btn {
+  box-shadow: none !important;
   outline: none;
 }
 
@@ -113,10 +115,10 @@ body {
 .content__nav__nofications i {
   margin-right: 20px;
 }
-.content__nav__user{
-    position: relative;
-    display: flex;
-    align-items: center;
+.content__nav__user {
+  position: relative;
+  display: flex;
+  align-items: center;
 }
 .content__nav__user-wrapper {
   display: flex;
@@ -135,37 +137,36 @@ body {
   padding: 0 10px;
   font-weight: bold;
 }
-.content__nav__user__subnav{
-    position: absolute;
-    width: 100%;
-    top: 100%;
-    padding-top: 10px;
-    visibility: hidden;
-    opacity: 0;
+.content__nav__user__subnav {
+  position: absolute;
+  width: 100%;
+  top: 100%;
+  padding-top: 10px;
+  visibility: hidden;
+  opacity: 0;
 }
-.content__nav__user:hover .content__nav__user__subnav{
-    visibility: visible;
-    opacity: 1;
+.content__nav__user:hover .content__nav__user__subnav {
+  visibility: visible;
+  opacity: 1;
 }
-.content__nav__user__subnav>div{
-    background-color:white;
-    box-shadow: 0 0 20px -5px rgba(150, 150, 150, 0.336);
-    border-radius: 5px;
-    padding: 5px 0;
-
+.content__nav__user__subnav > div {
+  background-color: white;
+  box-shadow: 0 0 20px -5px rgba(150, 150, 150, 0.336);
+  border-radius: 5px;
+  padding: 5px 0;
 }
-.content__nav__user__subnav .subnav__list{
-    padding:5px 20px;
+.content__nav__user__subnav .subnav__list {
+  padding: 5px 20px;
 }
-.content__nav__user__subnav .subnav__list a:hover{
-    color:var(--yellow-main)    
-}
-
-.content__nav__user__subnav .subnav__list:last-child{
-    border-top: 1px solid #cecece;
-
-}
-.subnav__list{
+.content__nav__user__subnav .subnav__list a:hover {
+  color: var(--yellow-main);
 }
 
-
+.content__nav__user__subnav .subnav__list:last-child {
+  border-top: 1px solid #cecece;
+}
+.subnav__list {
+  display: flex;
+  align-items: center;
+  cursor: pointer;
+}
