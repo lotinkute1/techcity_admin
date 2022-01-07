@@ -50,11 +50,12 @@ export default function TableDataProduct({
             product_name: item.val().product_name,
             number: item.val().number,
             default_price: item.val().default_price,
-            product_img: item.val().product_img.main_img,
+            product_img: item.val().product_img?.main_img,
             ship_id: item.val().ship_id,
             description: item.val().description,
             category_id: item.val().category_id,
             user_id: item.val().user_id,
+            brand: item.val().brand,
           });
         });
 
