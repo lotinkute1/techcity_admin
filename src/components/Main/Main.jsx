@@ -11,6 +11,21 @@ export default function Main() {
   const db = getDatabase();
   const [users, setUsers] = useState([]);
 
+  let { id } = useParams();
+   const currentUser = {
+    id: 2,
+    name: "Ms. Frances Kris",
+    phone_number: "0375127486",
+    email: "preston23@example.com",
+    address: "523 Nader Orchard Apt. 200\nNorth Noemy, UT 91527",
+    ava: "gTBupnE0ltk346NLdOr2fKtNHeyRMS156etQMhcU",
+    status: "0",
+    role: 0,
+    email_verified_at: null,
+    created_at: "2022-03-16T16:24:16.000000Z",
+    updated_at: "2022-03-16T16:24:16.000000Z",
+  };;
+
   const notify = (type, message) =>
     toast[type](message, {
       position: "top-right",
@@ -22,38 +37,19 @@ export default function Main() {
       progress: undefined,
     });
 
-  let { id } = useParams();
+  // users.forEach((user) => {
+  //   if (id === user.id) {
+  //     currentUser = user;
+  //   }
+  // });
 
-  let currenUser;
+  // từ id get từ param, call api get currentUuser -> setlocalStorage
 
-  users.forEach((user) => {
-    if (id === user.id) {
-      currenUser = user;
-    }
-  });
-
-  if (currenUser) {
-    localStorage.setItem(StorageKeys.USER, JSON.stringify(currenUser));
-  }
   useEffect(() => {
-    (() => {
-      const categoryRef = ref(db, "users");
-      onValue(categoryRef, (snapshot) => {
-        const temp = [];
-        snapshot.forEach((item) => {
-          temp.push({
-            id: item.key,
-            ...item.val(),
-          });
-        });
-        setUsers([...temp]);
-      });
-    })();
+    if (currentUser) {
+      localStorage.setItem(StorageKeys.USER, JSON.stringify(currentUser));
+    }
   }, []);
-
-  if (currenUser) {
-    localStorage.setItem(StorageKeys.USER, JSON.stringify(currenUser));
-  }
 
   const handleLogout = () => {
     localStorage.removeItem(StorageKeys.USER);
@@ -93,14 +89,14 @@ export default function Main() {
                   <div className="content__nav__user-ava">
                     <img
                       src={
-                        currenUser?.user_ava ||
+                        currentUser?.user_ava ||
                         "https://static.thenounproject.com/png/363640-200.png"
                       }
                       alt=""
                     />
                   </div>
                   <div className="content__nav__user-name">
-                    {currenUser?.name}
+                    {currentUser?.name}
                   </div>
                 </div>
                 <div className="content__nav__user__subnav">

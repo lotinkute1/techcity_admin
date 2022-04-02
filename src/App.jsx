@@ -9,7 +9,6 @@ function App() {
     <div className="container-fluid p-0">
       <div className="row gx-0">
         <Nav />
-
         <Routes>
           <Route path="/:id/*" element={<Main />} />
           {/* <Route path="/" element={<AdminPage />} /> */}
