@@ -13,6 +13,7 @@ import { getDatabase, ref, onValue } from "firebase/database";
 import { useEffect, useState } from "react";
 import classNames from "classnames";
 import PropTypes from "prop-types";
+import productApi from "../../api/productApi";
 
 TableDataProduct.propTypes = {
   onEditClick: PropTypes.func,
@@ -37,34 +38,21 @@ export default function TableDataProduct({
   };
 
   // }
-  useEffect(() => {
-    // cần change
-    (() => {
-      const db = getDatabase();
-      const productsRef = ref(db, "products");
-      onValue(productsRef, (snapshot) => {
-        const newProductList = [...productList];
-        snapshot.forEach((item) => {
-          newProductList.push({
-            id: item.key,
-            product_name: item.val().product_name,
-            number: item.val().number,
-            default_price: item.val().default_price,
-            product_img: item.val().product_img?.main_img,
-            ship_id: item.val().ship_id,
-            description: item.val().description,
-            category_id: item.val().category_id,
-            user_id: item.val().user_id,
-            brand: item.val().brand,
-          });
-        });
 
-        setProductList([...newProductList]);
-      });
-    })();
-  }, []);
+  const getAllProduct = async ()=>{
+    try {
+      const repsonse = await productApi.getAll();
+      const {data} = repsonse;
+      setProductList(data);
+    } catch (error) {
+      
+    }
+  }
+  useEffect(()=>{
+    getAllProduct();
+  },[])
 
-  console.log(productList);
+
   return (
     <div className="table-responsive">
       <table className="table table-striped custom-table">
