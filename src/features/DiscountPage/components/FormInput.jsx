@@ -19,14 +19,13 @@ function FormInput({
   const initialFormData = Object.freeze({
     discount_img: "",
     discount_name: "",
-    end_date: "",
-    start_date: "",
+    end_day: "",
+    start_day: "",
     status: "",
   });
 
   const [formValue, setFormValue] = useState(initialFormData);
   const db = getDatabase();
-  
   // need change
   useEffect(() => {
     let isMounted = true;
@@ -45,7 +44,7 @@ function FormInput({
   
 
   const handleInputChange = (e) => {
-    if(e.target.name==="start_date"||e.target.name==="end_date") {
+    if(e.target.name==="start_day"||e.target.name==="end_day") {
       setFormValue({
         ...formValue,
         [e.target.name]: formatDate2(e.target.value),
@@ -105,16 +104,27 @@ function FormInput({
               onChange={(e) => handleInputChange(e)}
             />
           </div>
+          <div className="col-sm fw-bold">
+            <label htmlFor="name">Status</label>
+            <input
+              className="form-control"
+              id="status"
+              type="text"
+              name="status"
+              value={formValue?.status || ""}
+              onChange={(e) => handleInputChange(e)}
+            />
+          </div>
           
           {/* discount start date */}
           <div className="col-sm fw-bold">
             <label htmlFor="ship_id">start date</label>
             <input
               className="form-control"
-              id="start_date"
+              id="start_day"
               type="date"
-              name="start_date"
-              value={formatDate(formValue?.start_date)}
+              name="start_day"
+              value={formatDate(formValue?.start_day)}
               onChange={(e) => handleInputChange(e)}
             />
           </div>
@@ -122,10 +132,10 @@ function FormInput({
             <label htmlFor="ship_id">end date</label>
             <input
               className="form-control"
-              id="end_date"
+              id="end_day"
               type="date"
-              name="end_date"
-              value={formatDate(formValue?.end_date)}
+              name="end_day"
+              value={formatDate(formValue?.end_day)}
               onChange={(e) => handleInputChange(e)}
             />
           </div>

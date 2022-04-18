@@ -25,8 +25,10 @@ export default function TableDataProduct({
   onEditClick = null,
   onClick = null,
   onRemoveClick = null,
+  productList = [],
+  setProductList
 }) {
-  const [productList, setProductList] = useState([]);
+
   const db = getDatabase();
 
   const handleEditClick = (product) => {
@@ -60,6 +62,7 @@ export default function TableDataProduct({
           <tr>
             <th scope="col">Image</th>
             <th scope="col">Name</th>
+            <th scope="col">Brand</th>
             <th scope="col">Quanity</th>
             <th scope="col">Price</th>
             <th scope="col">Action</th>
@@ -71,23 +74,26 @@ export default function TableDataProduct({
               <td className="pl-0" width={"300px"}>
                 <div className="d-flex align-items-center justify-content-center">
                   <img
-                    src={product.product_img}
-                    alt={product.product_name}
+                    src={product.img}
+                    alt={product.name}
                     className="product_img"
                   />
                 </div>
               </td>
               <td width={"300px"} className="pt-84">
-                {product.product_name}
+                {product.name}
+              </td>
+              <td width={"300px"} className="pt-84">
+                {product.brand}
               </td>
               <td width={"100px"} className="pt-84">
-                {product.number}
+                {product.stock_amount}
               </td>
               <td width={"150px"} className="pt-84">
                 {new Intl.NumberFormat("vi-VN", {
                   style: "currency",
                   currency: "VND",
-                }).format(product.default_price)}
+                }).format(product.price)}
               </td>
               <td className="pt-84">
                 <button

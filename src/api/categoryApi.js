@@ -17,6 +17,14 @@ const categoryApi = {
     const url = "/category/addCategory";
     return axiosClient.post(url, data);
   },
+  update(id,data) {
+    const url = `/category/updateCategory/${id}`;
+    return axiosClient.put(url, data);
+  },
+  delete(id) {
+    const url = `/category/deleteCategoryById/${id}`;
+    return axiosClient.delete(url);
+  },
 };
 
 export default categoryApi;

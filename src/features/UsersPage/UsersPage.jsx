@@ -1,16 +1,21 @@
 import { getDatabase, ref, remove, set } from "firebase/database";
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
 import { toast, ToastContainer } from "react-toastify";
 import { v4 as uuidv4 } from "uuid";
 import "./css/style.css";
 // import TableData from "../../components/TableData/TableData";
 import TableDataUsers from "../../components/TableData/TableDataUsers";
 import FormInput from "./components/FormInput";
+
+import userApi from "../../api/userApi";
 export default function UsersPage() {
   const db = getDatabase();
   const [openForm, setOpenForm] = useState(false);
   const [userId, setUsertId] = useState(0);
-  const [statusBtn, setStatusBtn] = useState(true);//thay đổi trạng thái button trong form thái thêm/sửa
+  const [statusBtn, setStatusBtn] = useState(true); //thay đổi trạng thái button trong form thái thêm/sửa
+
+  const [users, setUsers] = useState([]);
+
   const notify = (type, message) =>
     toast[type](message, {
       position: "top-right",
@@ -27,7 +32,7 @@ export default function UsersPage() {
     setUsertId(0);
     setStatusBtn(true);
   };
-  
+
   // lấy ra id , đổi trạng thái button thành sửa (chuyền cho dataTable)
   const handleEditClick = (userId) => {
     setUsertId(userId);
@@ -39,48 +44,50 @@ export default function UsersPage() {
     setOpenForm(true);
   };
   // xóa user handler
-  const handleRemoveClick = (userId) => {
-    console.log(userId);
+
+  const handleRemoveClick = async (userId) => {
     if (window.confirm("Bạn thực sự muốn xóa ?")) {
-      remove(ref(db, "/users/" + userId));
+      // remove(ref(db, "/products/" + productId));
+      await userApi.deleteUser(userId);
+      setUsers(users.filter((item) => item.id !== userId));
       notify("info", "Xóa thành công !");
     } else {
       // Do nothing!
       console.log("Thing was not saved to the database.");
     }
   };
-  
   // thêm user handler
-  const handleAddBtn = (formValue) => {
+  const handleAddBtn = async (formValue) => {
     console.log("thong tin can add la:");
     console.log(formValue);
     if (
       formValue.email !== "" &&
       formValue.join_date !== "" &&
       formValue.name !== "" &&
-      formValue.passowrd !== "" &&
-      formValue.phone !== "" &&
+      formValue.password !== "" &&
+      formValue.phone_number !== "" &&
       formValue.user_address !== "" &&
       formValue.user_ava !== "" &&
       formValue.user_type !== ""
     ) {
-      set(ref(db, "users/" + uuidv4()), {
-        email: formValue.email.trim(),
-        join_date: formValue?.join_date?.trim(),
-        name: formValue.name?.trim(),
-        password:  formValue.password?.trim() ,
-        phone: formValue.phone?.trim(),
-        user_address: formValue.user_address?.trim(),
-        user_ava: formValue.user_ava?.trim(),
-        user_status: 1,
-        user_type:Number( formValue.user_type?.trim()),
-      });
+      console.log(formValue);
+      const response = await userApi.register(formValue);
+      // set(ref(db, "products/" + uuidv4()), {
+      //   product_name: formValue.product_name.trim(),
+      //   number: formValue.number.trim(),
+      //   default_price: formValue.default_price.trim(),
+      //   product_img: { main_img: formValue.main_img.trim() },
+      //   ship_id: formValue.ship_id.trim(),
+      //   description: formValue.description.trim(),
+      //   category_id: formValue.category_id.trim(),
+      //   user_id: formValue.user_id.trim(),
+      //   brand: formValue.brand.trim(),
+      // });
+      setUsers([...users, response.data]);
       notify("success", "Thêm thành công !");
     }
     // handleClickOpenForm();
   };
-
-
 
   // tắt bặt trạng thái người dùng
   const handleToggleBtn = (user) => {
@@ -98,7 +105,7 @@ export default function UsersPage() {
     }
   };
   // bấm nút save (edit) trong form
-  const handleSaveBtn = (formValue) => {
+  const handleSaveBtn = async (formValue) => {
     console.log("thong tin can edit la");
     console.log(formValue);
     console.log(userId);
@@ -107,19 +114,36 @@ export default function UsersPage() {
       formValue.email !== "" &&
       formValue.join_date !== "" &&
       formValue.name !== "" &&
-      formValue.passowrd !== "" &&
-      formValue.phone !== "" &&
+      formValue.password !== "" &&
+      formValue.phone_number !== "" &&
       formValue.user_address !== "" &&
       formValue.user_ava !== "" &&
-      formValue.user_status !== ""&&
+      formValue.user_status !== "" &&
       formValue.user_type !== ""
     ) {
-      set(ref(db, "/users/" + userId), { ...formValue });
+      const response = await userApi.update(userId, formValue);
+      setUsers(
+        users.map((item) => {
+          if (item.id === userId) {
+            return response.data;
+          }
+          return item;
+        })
+      );
       notify("success", "Sửa thành công !");
     }
     handleClickOpenForm();
-
   };
+
+  // fetch all data of user
+  useEffect(() => {
+    (async () => {
+      const res = await userApi.getAll();
+      console.log(res.data);
+      setUsers(res.data);
+    })();
+  }, []);
+
   return (
     <>
       {/* Page Heading */}
@@ -128,7 +152,6 @@ export default function UsersPage() {
       </div>
       <div className="row">
         <div className="col-lg mb-2">
-
           {openForm && (
             <>
               <div className="row g-3 mb-2 ">
@@ -150,7 +173,7 @@ export default function UsersPage() {
                 type="button"
                 className="btn btn-primary"
               >
-                {openForm?"close":"New user"}
+                {openForm ? "close" : "New user"}
               </button>
             </div>
           </div>
@@ -160,6 +183,8 @@ export default function UsersPage() {
               onEditClick={handleEditClick}
               onRemoveClick={handleRemoveClick}
               onToggleBtn={handleToggleBtn}
+              users={users}
+              setUsers={setUsers}
             />
           </div>
         </div>

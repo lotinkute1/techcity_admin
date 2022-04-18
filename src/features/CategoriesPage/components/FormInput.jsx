@@ -15,6 +15,7 @@ function FormInput({
   onClick = null,
   categoryId,
   statusBtn = true,
+  categories=[],
 }) {
   const initialFormData = Object.freeze({
     category_name: "",
@@ -23,16 +24,21 @@ function FormInput({
 
   const [formValue, setFormValue] = useState(initialFormData);
 
+  // useEffect(() => {
+  //   console.log(categoryId);
+  //   const db = getDatabase();
+  //   (() => {
+  //     const categoryRef = ref(db, "categories/" + categoryId);
+  //     onValue(categoryRef, (snapshot) => {
+  //       setFormValue(snapshot.val());
+  //     });
+  //   })();
+  // }, [categoryId]);
   useEffect(() => {
-    console.log(categoryId);
-    const db = getDatabase();
-    (() => {
-      const categoryRef = ref(db, "categories/" + categoryId);
-      onValue(categoryRef, (snapshot) => {
-        setFormValue(snapshot.val());
-      });
-    })();
-  }, [categoryId]);
+    if(categoryId) {
+      setFormValue(categories.find(item => item.id === categoryId))
+    }
+}, [categoryId])
 
   const handleInputChange = (e) => {
     setFormValue({

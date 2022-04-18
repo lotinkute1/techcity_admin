@@ -17,8 +17,8 @@ const productApi = {
     const url = '/product/addProduct';
     return axiosClient.post(url,data);
   },
-  update(data){
-    const url =`/product/updateProduct/${data.id}`;
+  update(id,data){
+    const url =`/product/updateProduct/${id}`;
     return axiosClient.put(url,data);
   },
   delete(id) {
