@@ -36,7 +36,6 @@ export default function Main() {
   useEffect(() => {
     getUser();
   }, [id]);
-  console.log("currentUser", currentUser);
 
   // từ id get từ param, call api get currentUuser -> setlocalStorage
   useEffect(() => {
