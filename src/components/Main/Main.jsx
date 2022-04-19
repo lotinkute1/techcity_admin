@@ -8,39 +8,9 @@ import StorageKeys from "../../constants";
 import Router from "../../features/Router/Router";
 
 export default function Main() {
-  const db = getDatabase();
-  const [users, setUsers] = useState([]);
   const [currentUser, setCurrentUser] = useState(null);
 
   let { id } = useParams();
-  const getUser = async () => {
-    try {
-      const response = await userApi.getUserById(user_id);
-      const { data } = response;
-      setUser(data);
-    } catch (err) {
-      console.log("Fail to get api user by id");
-    }
-  };
-
-  useEffect(() => {
-    getUser();
-  }, [id]);
-  console.log('currentUser',currentUser);
-
-  // const currentUser = {
-  //   id: 2,
-  //   name: "Ms. Frances Kris",
-  //   phone_number: "0375127486",
-  //   email: "preston23@example.com",
-  //   address: "523 Nader Orchard Apt. 200\nNorth Noemy, UT 91527",
-  //   ava: "gTBupnE0ltk346NLdOr2fKtNHeyRMS156etQMhcU",
-  //   status: "0",
-  //   role: 0,
-  //   email_verified_at: null,
-  //   created_at: "2022-03-16T16:24:16.000000Z",
-  //   updated_at: "2022-03-16T16:24:16.000000Z",
-  // };
 
   const notify = (type, message) =>
     toast[type](message, {
@@ -53,19 +23,27 @@ export default function Main() {
       progress: undefined,
     });
 
-  // users.forEach((user) => {
-  //   if (id === user.id) {
-  //     currentUser = user;
-  //   }
-  // });
+  const getUser = async () => {
+    try {
+      const response = await userApi.getOne(id);
+      const { data } = response;
+      setCurrentUser(data);
+    } catch (err) {
+      console.log("Fail to get api user by id");
+    }
+  };
+
+  useEffect(() => {
+    getUser();
+  }, [id]);
+  console.log("currentUser", currentUser);
 
   // từ id get từ param, call api get currentUuser -> setlocalStorage
-
   useEffect(() => {
     if (currentUser) {
       localStorage.setItem(StorageKeys.USER, JSON.stringify(currentUser));
     }
-  }, []);
+  }, [currentUser]);
 
   const handleLogout = () => {
     localStorage.removeItem(StorageKeys.USER);
@@ -100,12 +78,12 @@ export default function Main() {
                   <i className="fas fa-envelope" />
                 </a>
               </div>
-              {/* <div className="content__nav__user">
+              <div className="content__nav__user">
                 <div className="content__nav__user-wrapper">
                   <div className="content__nav__user-ava">
                     <img
                       src={
-                        currentUser?.user_ava ||
+                        currentUser?.ava ||
                         "https://static.thenounproject.com/png/363640-200.png"
                       }
                       alt=""
@@ -128,7 +106,7 @@ export default function Main() {
                     </div>
                   </div>
                 </div>
-              </div> */}
+              </div>
               <div className="subnav__list">
                 <a href="http://localhost:3000/" onClick={handleLogout}>
                   Quay về trang chủ
