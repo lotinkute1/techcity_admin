@@ -2,7 +2,7 @@ import axiosClient from "./axiosClient";
 
 const discountApi = {
   getAll() {
-    const url = "/discount/getDiscounts";
+    const url = "/getDiscounts";
     return axiosClient.get(url);
   },
   getById(id) {
@@ -10,15 +10,15 @@ const discountApi = {
     return axiosClient.get(url);
   },
   add(data) {
-    const url = "/discount/addDiscount";
+    const url = "/addDiscount";
     return axiosClient.post(url, data);
   }, 
-  update(data) {
-    const url= `discount/updateDiscount/${data.id}`;
+  update(id,data) {
+    const url= `/updateDiscount/${id}`;
     return axiosClient.put(url,data);
 },
 remove(id) {
-  const url= `discount/deleteDiscount/${id}`;
+  const url= `/deleteDiscount/${id}`;
   return axiosClient.delete(url);
 },
  getAllDiscountDetail(){
@@ -33,8 +33,8 @@ remove(id) {
   const url = "/discount/addDiscountDetail";
   return axiosClient.post(url, data);
 }, 
-updateDiscountDetail(data) {
-  const url= `discount/updateDiscountDetail/${data.id}`;
+updateDiscountDetail(id,data) {
+  const url= `discount/updateDiscountDetail/${id}`;
   return axiosClient.put(url,data);
 },
 removeDiscountDetail(id) {

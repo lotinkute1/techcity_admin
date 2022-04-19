@@ -2,7 +2,7 @@ import classNames from "classnames";
 import { getDatabase, onValue, push, ref } from "firebase/database";
 import PropTypes from "prop-types";
 import { useEffect, useState } from "react";
-
+import discountApi from "../../api/discountApi";
 import "./css/style.css";
 import "./fonts/icomoon/style.css";
 
@@ -19,8 +19,10 @@ export default function TableDataDiscounts({
   onClick = null,
   onRemoveClick = null,
   onToggleBtn = null,
+  discounts=[],
+  setDiscounts
 }) {
-  const [discounts, setDiscounts] = useState([]);
+  
   const db = getDatabase();
 
   const handleClickTogle = (e, discount) => {
@@ -41,22 +43,34 @@ export default function TableDataDiscounts({
     if (onRemoveClick) onRemoveClick(discount.id);
   };
 
-  useEffect(() => {
-    (() => {
-      const categoryRef = ref(db, "discounts");
-      onValue(categoryRef, (snapshot) => {
-        const temp = [];
-        snapshot.forEach((item) => {
-          temp.push({
-            id: item.key,
-            ...item.val(),
-          });
-        });
-        setDiscounts([...temp]);
-      });
-    })();
-  }, []);
+  // useEffect(() => {
+  //   (() => {
+  //     const categoryRef = ref(db, "discounts");
+  //     onValue(categoryRef, (snapshot) => {
+  //       const temp = [];
+  //       snapshot.forEach((item) => {
+  //         temp.push({
+  //           id: item.key,
+  //           ...item.val(),
+  //         });
+  //       });
+  //       setDiscounts([...temp]);
+  //     });
+  //   })();
+  // }, []);
+  const getAllDiscouts = async ()=>{
+    try {
+      const repsonse = await discountApi.getAll();
+      const {data} = repsonse;
 
+      setDiscounts(data);
+    } catch (error) {
+      
+    }
+  }
+  useEffect(()=>{
+    getAllDiscouts();
+  },[])
 //   const userTypeCSS = (userType)=>{
 //     const userTypec=Number(userType);
 //     switch (userTypec) {
@@ -102,11 +116,11 @@ export default function TableDataDiscounts({
       </td>
       {/* start day */}
       <td width={"120px"} className="">
-        {discount.start_date}
+        {discount.start_day}
       </td>
       {/* end day */}
       <td width={"150px"} className="">
-        {discount.end_date}
+        {discount.end_day}
       </td>
       {/* discounts status */}
       <td width={"100px"}>

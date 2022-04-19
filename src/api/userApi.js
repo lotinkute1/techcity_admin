@@ -1,3 +1,4 @@
+
 import axiosClient from "./axiosClient";
 
 const userApi = {
@@ -9,18 +10,19 @@ const userApi = {
     const url = "/login";
     return axiosClient.post(url, data);
   },
-  getAllUser() {
-    const url = "/user/getUsers";
-    return axiosClient.get(url);
+
+  getAll() {
+    return axiosClient.get("/user/getUsers")
   },
-  getUserById(id) {
-    const url = `/user/getUserById/${id}`;
-    return axiosClient.get(url);
+  getOne(id) {
+    return axiosClient.get(`/user/getUserById/${id}`);
   },
-  updateUser(data) {
-    const url = `user/updateUser/${data.id}`;
-    return axiosClient.put(url, data);
+  updateUser(id,data) {
+    return axiosClient.put(`/user/updateUser/${id}`, data)
   },
+  deleteUser(id) {
+    return axiosClient.delete(`/user/deleteUser/${id}`)
+  }
 };
 
 export default userApi;

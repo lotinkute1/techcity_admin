@@ -1,6 +1,10 @@
 import PropTypes from "prop-types";
 import React, { useEffect, useState } from "react";
 import { getDatabase, onValue, ref } from "firebase/database";
+import categoryApi from "../../../api/categoryApi";
+import { async } from "@firebase/util";
+import userApi from "../../../api/userApi";
+import shipApi from "../../../api/shipApi";
 
 FormInput.propTypes = {
   onAddBtn: PropTypes.func,
@@ -15,15 +19,20 @@ function FormInput({
   onClick = null,
   productId,
   statusBtn = true,
+  productList =[]
 }) {
   const initialFormData = Object.freeze({
     // need change
-    product_name: "",
-    number: "",
-    default_price: "",
+    name: "",
+    stock_amount: "",
+    price: "",
     ship_id: "",
     description: "",
-    main_img: "",
+    img: "",
+    img1  : "",
+    img2  : "",
+    img3  : "",
+    img4  : "",
     category_id: "",
     user_id: "",
     brand: "",
@@ -33,103 +42,141 @@ function FormInput({
   const [categoryIds, setCategoryIds] = useState([]);
   const [userIds, setUserIds] = useState([]);
   const [shipIds, setShipIds] = useState([]);
-  const db = getDatabase();
+  // const db = getDatabase();
 
   // need change
-  useEffect(() => {
-    (() => {
-      const productRef = ref(db, "products/" + productId);
-      onValue(productRef, (snapshot) => {
-        let data = {};
-        if (snapshot.val()) {
-          const {
-            brand,
-            category_id,
-            default_price,
-            description,
-            number,
-            product_img,
-            product_name,
-            ship_id,
-            user_id,
-          } = snapshot.val();
+  // useEffect(() => {
+  //   (() => {
+  //     const productRef = ref(db, "products/" + productId);
+  //     onValue(productRef, (snapshot) => {
+  //       let data = {};
+  //       if (snapshot.val()) {
+  //         const {
+  //           brand,
+  //           category_id,
+  //           price,
+  //           description,
+  //           stock_amount,
+  //           img,
+  //           img1,
+  //           img2,
+  //           img3,
+  //           img4,
+  //           name,
+  //           ship_id,
+  //           user_id,
+  //         } = snapshot.val();
 
-          data = {
-            brand,
-            category_id,
-            default_price,
-            description,
-            number,
-            product_img,
-            product_name,
-            ship_id,
-            user_id,
-          };
-        }
-        if (data.product_img) {
-          const { main_img } = data.product_img;
-          data = { ...data, main_img };
-        }
-        setFormValue({
-          product_name: data.product_name,
-          number: data.number,
-          default_price: data.default_price,
-          ship_id: data.ship_id,
-          description: data.description,
-          product_img: data.product_img,
-          main_img: data.main_img,
-          category_id: data.category_id,
-          user_id: data.user_id,
-          brand: data.brand,
-        });
-      });
-    })();
-  }, [productId]);
+  //         data = {
+  //           brand,
+  //           category_id,
+  //           price,
+  //           description,
+  //           stock_amount,
+  //           img,
+  //           img1,
+  //           img2,
+  //           img3,
+  //           img4,
+  //           name,
+  //           ship_id,
+  //           user_id,
+  //         };
+  //       }
+  //       if (data.img) {
+  //         const { img } = data.img;
+  //         data = { ...data, img };
+  //       }
+  //       setFormValue({
+  //         name: data.name,
+  //         stock_amount: data.stock_amount,
+  //         price: data.price,
+  //         ship_id: data.ship_id,
+  //         description: data.description,
+  //         img: data.img,
+  //         img1: data.img1,
+  //         img2: data.img2,
+  //         img3: data.img3,
+  //         img4: data.img4,
+  //         category_id: data.category_id,
+  //         user_id: data.user_id,
+  //         brand: data.brand,
+  //       });
+  //     });
+  //   })();
+  // }, [productId]);
 
-  useEffect(() => {
-    (() => {
-      const categoryRef = ref(db, "categories");
-      onValue(categoryRef, (snapshot) => {
-        const newCategoryIds = [...categoryIds];
-        for (const id in snapshot.val()) {
-          newCategoryIds.push({
-            id,
-          });
-        }
-        setCategoryIds([...newCategoryIds]);
-      });
-    })();
-  }, []);
-
-  useEffect(() => {
-    (() => {
-      const userRef = ref(db, "users");
-      onValue(userRef, (snapshot) => {
-        const newUserid = [...userIds];
-        for (const id in snapshot.val()) {
-          newUserid.push({
-            id,
-          });
-        }
-        setUserIds([...newUserid]);
-      });
-    })();
-  }, []);
+  // useEffect(() => {
+  //   (() => {
+  //     const categoryRef = ref(db, "categories");
+  //     onValue(categoryRef, (snapshot) => {
+  //       const newCategoryIds = [...categoryIds];
+  //       for (const id in snapshot.val()) {
+  //         newCategoryIds.push({
+  //           id,
+  //         });
+  //       }
+  //       setCategoryIds([...newCategoryIds]);
+  //     });
+  //   })();
+  // }, []);
 
   useEffect(() => {
-    (() => {
-      const userRef = ref(db, "ships");
-      onValue(userRef, (snapshot) => {
-        const newShipid = [...shipIds];
-        for (const id in snapshot.val()) {
-          newShipid.push({
-            id,
-          });
-        }
-        setShipIds([...newShipid]);
-      });
-    })();
-  }, []);
+      if(productId) {
+        setFormValue(productList.find(item => item.id === productId))
+      }
+  }, [productId])
+
+  useEffect(() => {
+     (async() => {
+        const response = await categoryApi.getAll()
+        setCategoryIds(response.data)
+     })()
+  }, [])
+
+  useEffect(() => {
+      (async() => {
+        const response = await userApi.getAll()
+        setUserIds(response.data)
+      })()
+  }, [])
+
+  useEffect(() => {
+    (async () => {
+        const response = await shipApi.getAll()
+        setShipIds(response.data)
+    })()
+  },[])
+
+  // useEffect(() => {
+  //   (() => {
+  //     const userRef = ref(db, "users");
+  //     onValue(userRef, (snapshot) => {
+  //       const newUserid = [...userIds];
+  //       for (const id in snapshot.val()) {
+  //         newUserid.push({
+  //           id,
+  //         });
+  //       }
+  //       setUserIds([...newUserid]);
+  //     });
+  //   })();
+  // }, []);
+
+  // useEffect(() => {
+  //   (() => {
+  //     const userRef = ref(db, "ships");
+  //     onValue(userRef, (snapshot) => {
+  //       const newShipid = [...shipIds];
+  //       for (const id in snapshot.val()) {
+  //         newShipid.push({
+  //           id,
+  //         });
+  //       }
+  //       setShipIds([...newShipid]);
+  //     });
+  //   })();
+  // }, []);
 
   const handleInputChange = (e) => {
     setFormValue({
@@ -158,7 +205,6 @@ function FormInput({
     setFormValue(initialFormData);
   };
 
-  console.log(formValue);
   return (
     <>
       <form className="container">
@@ -169,8 +215,8 @@ function FormInput({
               className="form-control"
               id="name"
               type="text"
-              name="product_name"
-              value={formValue?.product_name || ""}
+              name="name"
+              value={formValue?.name || ""}
               onChange={(e) => handleInputChange(e)}
             />
           </div>
@@ -180,8 +226,8 @@ function FormInput({
               className="form-control"
               id="price"
               type="text"
-              name="default_price"
-              value={formValue?.default_price || ""}
+              name="price"
+              value={formValue?.price || ""}
               onChange={(e) => handleInputChange(e)}
             />
           </div>
@@ -194,8 +240,8 @@ function FormInput({
               className="form-control"
               id="quantity"
               type="text"
-              name="number"
-              value={formValue?.number || ""}
+              name="stock_amount"
+              value={formValue?.stock_amount || ""}
               onChange={(e) => handleInputChange(e)}
             />
           </div>
@@ -208,10 +254,10 @@ function FormInput({
               onChange={(e) => handleInputChange(e)}
               value={formValue?.ship_id}
             >
-              <option value="">--Chọn ID--</option>
+              <option value="">--Chọn ship--</option>
               {shipIds.map((item) => (
                 <option key={item.id} value={item.id}>
-                  {item.id}
+                  {item.ship_company}
                 </option>
               ))}
             </select>
@@ -228,16 +274,16 @@ function FormInput({
               onChange={(e) => handleInputChange(e)}
               value={formValue?.category_id}
             >
-              <option value="">--Chọn ID--</option>
+              <option value="">--Chọn category--</option>
               {categoryIds.map((item) => (
                 <option key={item.id} value={item.id}>
-                  {item.id}
+                  {item.category_name}
                 </option>
               ))}
             </select>
           </div>
           <div className="col-sm fw-bold">
-            <label htmlFor="user_id">User_ID: </label>
+            <label htmlFor="user_id">User: </label>
             <select
               className="select-input"
               name="user_id"
@@ -249,7 +295,7 @@ function FormInput({
 
               {userIds.map((item, index) => (
                 <option key={item.id} value={item.id}>
-                  {item.id}
+                  {item.name}
                 </option>
               ))}
             </select>
@@ -289,11 +335,52 @@ function FormInput({
       <p className="form-label  mb-0 fw-bold">Images</p>
       <input
         className="form-control mt-2 mb-3"
-        id="main_img"
+        id="img"
         type="text"
         placeholder="URL image"
-        name="main_img"
-        value={formValue?.main_img || ""}
+        name="img"
+        value={formValue?.img || ""}
+        onChange={(e) => handleInputChange(e)}
+      />
+
+<p className="form-label  mb-0 fw-bold">Images</p>
+      <input
+        className="form-control mt-2 mb-3"
+        id="img1"
+        type="text"
+        placeholder="URL image"
+        name="img1"
+        value={formValue?.img1 || ""}
+        onChange={(e) => handleInputChange(e)}
+      />
+<p className="form-label  mb-0 fw-bold">Images</p>
+      <input
+        className="form-control mt-2 mb-3"
+        id="img2"
+        type="text"
+        placeholder="URL image"
+        name="img2"
+        value={formValue?.img2 || ""}
+        onChange={(e) => handleInputChange(e)}
+      />
+<p className="form-label  mb-0 fw-bold">Images</p>
+      <input
+        className="form-control mt-2 mb-3"
+        id="img3"
+        type="text"
+        placeholder="URL image"
+        name="img3"
+        value={formValue?.img3 || ""}
+        onChange={(e) => handleInputChange(e)}
+      />
+<p className="form-label  mb-0 fw-bold">Images</p>
+      <input
+        className="form-control mt-2 mb-3"
+        id="img4"
+        type="text"
+        placeholder="URL image"
+        name="img4"
+        value={formValue?.img4 || ""}
         onChange={(e) => handleInputChange(e)}
       />
 

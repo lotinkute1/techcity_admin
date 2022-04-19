@@ -4,20 +4,20 @@ import { Link } from "react-router-dom";
 import StorageKeys from "../../constants";
 
 export default function Nav() {
-  const currentUser = JSON.parse(localStorage.getItem(StorageKeys.USER));
-  // const currentUser = {
-  //   id: 2,
-  //   name: "Ms. Frances Kris",
-  //   phone_number: "0375127486",
-  //   email: "preston23@example.com",
-  //   address: "523 Nader Orchard Apt. 200\nNorth Noemy, UT 91527",
-  //   ava: "gTBupnE0ltk346NLdOr2fKtNHeyRMS156etQMhcU",
-  //   status: "0",
-  //   role: 0,
-  //   email_verified_at: null,
-  //   created_at: "2022-03-16T16:24:16.000000Z",
-  //   updated_at: "2022-03-16T16:24:16.000000Z",
-  // };
+  // const currentUser = JSON.parse(localStorage.getItem(StorageKeys.USER));
+  const currentUser = {
+    id: 2,
+    name: "Ms. Frances Kris",
+    phone_number: "0375127486",
+    email: "preston23@example.com",
+    address: "523 Nader Orchard Apt. 200\nNorth Noemy, UT 91527",
+    ava: "gTBupnE0ltk346NLdOr2fKtNHeyRMS156etQMhcU",
+    status: "0",
+    role: 0,
+    email_verified_at: null,
+    created_at: "2022-03-16T16:24:16.000000Z",
+    updated_at: "2022-03-16T16:24:16.000000Z",
+  };
   
   const navOrderPageRenderer = (currentUser) => {
     return (<Link to={`/${currentUser?.id}/OrdersPage`}>

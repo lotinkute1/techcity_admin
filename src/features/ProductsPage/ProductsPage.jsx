@@ -7,6 +7,7 @@ import { v4 as uuidv4 } from "uuid";
 import { ToastContainer, toast } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
 import { getDatabase, ref, remove, set } from "firebase/database";
+import productApi from "../../api/productApi";
 
 ProductsPage.propTypes = {};
 
@@ -15,6 +16,8 @@ function ProductsPage(props) {
   const [openForm, setOpenForm] = useState(false);
   const [productId, setProductId] = useState(0);
   const [statusBtn, setStatusBtn] = useState(true);
+
+  const [productList, setProductList] = useState([]);
 
   const notify = (type, message) =>
     toast[type](message, {
@@ -36,8 +39,8 @@ function ProductsPage(props) {
     setOpenForm(true);
   };
 
-  const handleAddBtn = (formValue) => {
-    const db = getDatabase();
+  const handleAddBtn = async (formValue) => {
+    // const db = getDatabase();
     if (
       formValue.product_name !== "" &&
       formValue.number !== "" &&
@@ -49,29 +52,35 @@ function ProductsPage(props) {
       formValue.user_id !== "" &&
       formValue.brand !== ""
     ) {
-      set(ref(db, "products/" + uuidv4()), {
-        product_name: formValue.product_name.trim(),
-        number: formValue.number.trim(),
-        default_price: formValue.default_price.trim(),
-        product_img: { main_img: formValue.main_img.trim() },
-        ship_id: formValue.ship_id.trim(),
-        description: formValue.description.trim(),
-        category_id: formValue.category_id.trim(),
-        user_id: formValue.user_id.trim(),
-        brand: formValue.brand.trim(),
-      });
+      console.log(formValue)
+     const response =  await productApi.add(formValue)
+      // set(ref(db, "products/" + uuidv4()), {
+      //   product_name: formValue.product_name.trim(),
+      //   number: formValue.number.trim(),
+      //   default_price: formValue.default_price.trim(),
+      //   product_img: { main_img: formValue.main_img.trim() },
+      //   ship_id: formValue.ship_id.trim(),
+      //   description: formValue.description.trim(),
+      //   category_id: formValue.category_id.trim(),
+      //   user_id: formValue.user_id.trim(),
+      //   brand: formValue.brand.trim(),
+      // });
+      setProductList([...productList, response.data])
       notify("success", "Thêm thành công !");
     }
   };
 
   const handleEditClick = (productId) => {
+   
     setProductId(productId);
     setStatusBtn(false);
   };
 
-  const handleRemoveClick = (productId) => {
+  const handleRemoveClick = async (productId) => {
     if (window.confirm("Bạn thực sự muốn xóa ?")) {
-      remove(ref(db, "/products/" + productId));
+      // remove(ref(db, "/products/" + productId));
+      await productApi.delete(productId)
+      setProductList(productList.filter(item => item.id !== productId))
       notify("info", "Xóa thành công !");
     } else {
       // Do nothing!
@@ -79,7 +88,7 @@ function ProductsPage(props) {
     }
   };
 
-  const handleSaveBtn = (formValue) => {
+  const handleSaveBtn = async (formValue) => {
     if (
       productId &&
       formValue.product_name !== "" &&
@@ -92,7 +101,14 @@ function ProductsPage(props) {
       formValue.user_id !== "" &&
       formValue.brand !== ""
     ) {
-      set(ref(db, "/products/" + productId), { ...formValue });
+      // set(ref(db, "/products/" + productId), { ...formValue });
+      const response = await productApi.update(productId,formValue)
+      setProductList(productList.map(item => {
+          if(item.id === productId) {
+            return response.data
+          }
+          return item
+      }))
       notify("success", "Sửa thành công !");
     }
   };
@@ -110,6 +126,7 @@ function ProductsPage(props) {
               <div className="row g-3 mb-2 ">
                 <FormInput
                   statusBtn={statusBtn}
+                  productList={productList}
                   onClick={handleEditClickOpenForm}
                   productId={productId}
                   onAddBtn={handleAddBtn}
@@ -135,6 +152,8 @@ function ProductsPage(props) {
               onClick={handleEditClickOpenForm}
               onEditClick={handleEditClick}
               onRemoveClick={handleRemoveClick}
+              productList={productList}
+              setProductList = {setProductList}
             />
           </div>
         </div>
