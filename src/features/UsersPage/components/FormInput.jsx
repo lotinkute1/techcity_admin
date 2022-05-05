@@ -20,8 +20,8 @@ function FormInput({
     email: "",
     join_date: "",
     name: "",
-    passowrd: "",
-    phone: "",
+    password: "",
+    phone_number: "",
     user_address: "",
     user_ava: "",
     user_status: "",
@@ -166,15 +166,15 @@ function FormInput({
               onChange={(e) => handleInputChange(e)}
             />
           </div>
-          {/* user phone */}
+          {/* user phone_number */}
           <div className="col-sm fw-bold">
-            <label htmlFor="ship_id">phone</label>
+            <label htmlFor="ship_id">phone_number</label>
             <input
               className="form-control"
-              id="phone"
+              id="phone_number"
               type="text"
-              name="phone"
-              value={formValue?.phone || ""}
+              name="phone_number"
+              value={formValue?.phone_number || ""}
               onChange={(e) => handleInputChange(e)}
             />
           </div>

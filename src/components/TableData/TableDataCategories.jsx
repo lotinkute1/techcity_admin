@@ -4,6 +4,7 @@ import {
 } from "firebase/database";
 import PropTypes from "prop-types";
 import { useEffect, useState } from "react";
+import categoryApi from "../../api/categoryApi";
 // import "./css/owl.carousel.min.css";
 //  Bootstrap CSS
 // import "./css/bootstrap.min.css";
@@ -26,9 +27,10 @@ export default function TableDataCategories({
   onClick = null,
   onRemoveClick = null,
   onToggleBtn = null,
+  categories=[],
+  setCategories
 }) {
-  const [categories, setCategories] = useState([]);
-  const db = getDatabase();
+
 
   const handleClickTogle = (e, category) => {
     const tableRowElement = e.target.closest(".table-row");
@@ -48,23 +50,34 @@ export default function TableDataCategories({
     if (onRemoveClick) onRemoveClick(category.id);
   };
 
-  useEffect(() => {
-    (() => {
-      const categoryRef = ref(db, "categories");
-      onValue(categoryRef, (snapshot) => {
-        const newCategories = [...categories];
-        for (const id in snapshot.val()) {
-          newCategories.push({
-            id,
-            category_name: snapshot.val()[id].category_name,
-            status: snapshot.val()[id].status,
-          });
-        }
-        setCategories([...newCategories]);
-      });
-    })();
-  }, []);
-
+  // useEffect(() => {
+  //   (() => {
+  //     const categoryRef = ref(db, "categories");
+  //     onValue(categoryRef, (snapshot) => {
+  //       const newCategories = [...categories];
+  //       for (const id in snapshot.val()) {
+  //         newCategories.push({
+  //           id,
+  //           category_name: snapshot.val()[id].category_name,
+  //           status: snapshot.val()[id].status,
+  //         });
+  //       }
+  //       setCategories([...newCategories]);
+  //     });
+  //   })();
+  // }, []);
+  const getAllCatelory = async ()=>{
+    try {
+      const repsonse = await categoryApi.getAll();
+      const {data} = repsonse;
+      setCategories(data);
+    } catch (error) {
+      
+    }
+  }
+  useEffect(()=>{
+    getAllCatelory();
+  },[])
   return (
     <>
       <div className="table-responsive">
@@ -81,9 +94,7 @@ export default function TableDataCategories({
             {categories.map((category, index) => (
               <tr
                 key={index}
-                className={classNames("table-row", {
-                  active: category.status === 0,
-                })}
+               
               >
                 <td width={"300px"} className="">
                   <div className="d-flex align-items-center justify-content-center">

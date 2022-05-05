@@ -1,15 +1,16 @@
-import { getDatabase, onValue, ref } from "firebase/database";
 import React, { useEffect, useState } from "react";
 import { Link, useParams } from "react-router-dom";
 import { ToastContainer, toast } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
 
+import userApi from "../../api/userApi";
 import StorageKeys from "../../constants";
 import Router from "../../features/Router/Router";
 
 export default function Main() {
-  const db = getDatabase();
-  const [users, setUsers] = useState([]);
+  const [currentUser, setCurrentUser] = useState(null);
+
+  let { id } = useParams();
 
   const notify = (type, message) =>
     toast[type](message, {
@@ -22,38 +23,26 @@ export default function Main() {
       progress: undefined,
     });
 
-  let { id } = useParams();
-
-  let currenUser;
-
-  users.forEach((user) => {
-    if (id === user.id) {
-      currenUser = user;
+  const getUser = async () => {
+    try {
+      const response = await userApi.getOne(id);
+      const { data } = response;
+      setCurrentUser(data);
+    } catch (err) {
+      console.log("Fail to get api user by id");
     }
-  });
+  };
 
-  if (currenUser) {
-    localStorage.setItem(StorageKeys.USER, JSON.stringify(currenUser));
-  }
   useEffect(() => {
-    (() => {
-      const categoryRef = ref(db, "users");
-      onValue(categoryRef, (snapshot) => {
-        const temp = [];
-        snapshot.forEach((item) => {
-          temp.push({
-            id: item.key,
-            ...item.val(),
-          });
-        });
-        setUsers([...temp]);
-      });
-    })();
-  }, []);
+    getUser();
+  }, [id]);
 
-  if (currenUser) {
-    localStorage.setItem(StorageKeys.USER, JSON.stringify(currenUser));
-  }
+  // từ id get từ param, call api get currentUuser -> setlocalStorage
+  useEffect(() => {
+    if (currentUser) {
+      localStorage.setItem(StorageKeys.USER, JSON.stringify(currentUser));
+    }
+  }, [currentUser]);
 
   const handleLogout = () => {
     localStorage.removeItem(StorageKeys.USER);
@@ -88,19 +77,19 @@ export default function Main() {
                   <i className="fas fa-envelope" />
                 </a>
               </div>
-              {/* <div className="content__nav__user">
+              <div className="content__nav__user">
                 <div className="content__nav__user-wrapper">
                   <div className="content__nav__user-ava">
                     <img
                       src={
-                        currenUser?.user_ava ||
+                        currentUser?.ava ||
                         "https://static.thenounproject.com/png/363640-200.png"
                       }
                       alt=""
                     />
                   </div>
                   <div className="content__nav__user-name">
-                    {currenUser?.name}
+                    {currentUser?.name}
                   </div>
                 </div>
                 <div className="content__nav__user__subnav">
@@ -116,9 +105,11 @@ export default function Main() {
                     </div>
                   </div>
                 </div>
-              </div> */}
+              </div>
               <div className="subnav__list">
-                <a href="http://localhost:3000/" onClick={handleLogout}>Quay về trang chủ</a >
+                <a href="http://localhost:3000/" onClick={handleLogout}>
+                  Quay về trang chủ
+                </a>
               </div>
             </div>
           </div>

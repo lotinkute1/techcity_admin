@@ -2,6 +2,8 @@ import classNames from "classnames";
 import { getDatabase, onValue, push, ref } from "firebase/database";
 import PropTypes from "prop-types";
 import { useEffect, useState } from "react";
+import orderApi from "../../api/orderApi";
+import productApi from "../../api/productApi";
 // import "./css/owl.carousel.min.css";
 //  Bootstrap CSS
 // import "./css/bootstrap.min.css";
@@ -22,9 +24,10 @@ TableDataOrders.propTypes = {
 export default function TableDataOrders({
   onRemoveClick = null,
   onToggleBtn = null,
+  orders = []
 }) {
-  const [orders, setOrders] = useState([]);
-  const db = getDatabase();
+  
+
 
   const handleClickTogle = ( order,status) => {
     
@@ -37,21 +40,23 @@ export default function TableDataOrders({
     if (onRemoveClick) onRemoveClick(order.id);
   };
 
-  useEffect(() => {
-    (() => {
-      const odersRef = ref(db, "orders");
-      onValue(odersRef, (snapshot) => {
-        const temp = [];
-        snapshot.forEach((item) => {
-          temp.push({
-            id: item.key,
-            ...item.val(),
-          });
-        });
-        setOrders([...temp]);
-      });
-    })();
-  }, []);
+  // useEffect(() => {
+  //   (() => {
+  //     const odersRef = ref(db, "orders");
+  //     onValue(odersRef, (snapshot) => {
+  //       const temp = [];
+  //       snapshot.forEach((item) => {
+  //         temp.push({
+  //           id: item.key,
+  //           ...item.val(),
+  //         });
+  //       });
+  //       setOrders([...temp]);
+  //     });
+  //   })();
+  // }, []);
+
+
 
   const renderOrders = orders.map((order, index) => (
     <tr
@@ -71,11 +76,11 @@ export default function TableDataOrders({
       </td>
 
       <td width={"120px"} className="">
-        {order.receiver_name}
+        {order.recipient_name}
       </td>
 
       <td width={"100px"} className="">
-        {order.receiver_location}
+        {order.recipient_address}
       </td>
       
 

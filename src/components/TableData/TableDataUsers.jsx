@@ -18,15 +18,17 @@ TableDataUsers.propTypes = {
   onClick: PropTypes.func,
   onRemoveClick: PropTypes.func,
   onToggleBtn: PropTypes.func,
+  users : PropTypes.array,
+  setUsers : PropTypes.func
 };
 export default function TableDataUsers({
   onEditClick = null,
   onClick = null,
   onRemoveClick = null,
   onToggleBtn = null,
+  users = [],
+  setUsers
 }) {
-  const [users, setUsers] = useState([]);
-  const db = getDatabase();
 
   const handleClickTogle = (e, user) => {
     const tableRowElement = e.target.closest(".table-row");
@@ -39,28 +41,14 @@ export default function TableDataUsers({
   };
 
   const handleEditClick = (category) => {
-    if (onClick) onClick();//để mở form input
+    if (onClick) onClick();
     if (onEditClick) onEditClick(category.id);//
   };
   const handleRemoveClick = (category) => {
     if (onRemoveClick) onRemoveClick(category.id);
   };
 
-  useEffect(() => {
-    (() => {
-      const categoryRef = ref(db, "users");
-      onValue(categoryRef, (snapshot) => {
-        const temp = [];
-        snapshot.forEach((item) => {
-          temp.push({
-            id: item.key,
-            ...item.val(),
-          });
-        });
-        setUsers([...temp]);
-      });
-    })();
-  }, []);
+ 
 
   const userTypeCSS = (userType)=>{
     const userTypec=Number(userType);
@@ -80,7 +68,7 @@ export default function TableDataUsers({
     <tr
       key={index}
       className={classNames("table-row", {
-        active: user.user_status === 0,
+        active: user.status === "0",
       })}
     >
       {/* STT */}
@@ -91,8 +79,8 @@ export default function TableDataUsers({
 
       <td className="pl-0" width={"100px"}>
         <div className="d-flex align-items-center justify-content-center">
-          <div className={"user_img_wrapper "+userTypeCSS(user.user_type)}>
-            <img src={user.user_ava} alt="" className="user_img " />
+          <div className={"user_img_wrapper "+userTypeCSS(user.role)}>
+            <img src={user.ava} alt="" className="user_img " />
           </div>
         </div>
       </td>
@@ -106,7 +94,7 @@ export default function TableDataUsers({
       </td>
       {/* user Email */}
       <td width={"120px"} className="">
-        {user.password}
+        {user.password || ""}
       </td>
       {/* user Email */}
       <td width={"150px"} className="">
@@ -114,15 +102,15 @@ export default function TableDataUsers({
       </td>
       {/* phone */}
       <td width={"100px"} className="">
-        {user.phone}
+        {user.phone_number}
       </td>
       {/* User address */}
       <td width={"150px"} className="">
-        {user.user_address}
+        {user.address}
       </td>
       {/* User join date */}
       <td width={"130px"} className="">
-        {user.join_date}
+        {user.created_at}
       </td>
 
       <td width={"100px"}>
@@ -131,11 +119,11 @@ export default function TableDataUsers({
             onClick={(e) => handleClickTogle(e, user)}
             type="checkbox"
             className="ios-switch-control-input"
-            defaultChecked={parseInt(user.user_status) > 0 ? true : false}
+            defaultChecked={parseInt(user.status) > 0 ? true : false}
           />
           <span
             className="ios-switch-control-indicator"
-            defaultChecked={parseInt(user.user_status) > 0 ? true : false}
+            defaultChecked={parseInt(user.status) > 0 ? true : false}
           />
         </label>
       </td>

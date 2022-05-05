@@ -6,11 +6,13 @@ import "./css/style.css";
 // import TableData from "../../components/TableData/TableData";
 import TableDataDiscounts from "../../components/TableData/TableDataDiscounts";
 import FormInput from "./components/FormInput";
+import discountApi from "../../api/discountApi";
 export default function DiscountPage() {
   const db = getDatabase();
   const [openForm, setOpenForm] = useState(false);
   const [discountId, setDiscountId] = useState(0);
   const [statusBtn, setStatusBtn] = useState(true);//thay đổi trạng thái button trong form thái thêm/sửa
+  const [discounts, setDiscounts] = useState([]);
   const notify = (type, message) =>
     toast[type](message, {
       position: "top-right",
@@ -39,10 +41,11 @@ export default function DiscountPage() {
     setOpenForm(true);
   };
   // xóa user handler
-  const handleRemoveClick = (discountId) => {
-    console.log(discountId);
+  const handleRemoveClick = async (discountId) => {
     if (window.confirm("Bạn thực sự muốn xóa ?")) {
-      remove(ref(db, "/discounts/" + discountId));
+      // remove(ref(db, "/products/" + productId));
+      await discountApi.remove(discountId)
+      setDiscounts(discounts.filter(item => item.id !== discountId))
       notify("info", "Xóa thành công !");
     } else {
       // Do nothing!
@@ -50,25 +53,26 @@ export default function DiscountPage() {
     }
   };
   
+  const formatdate = (date = "") => {
+    return date.split("/").reverse().join("/")
+  }
+  
   // thêm user handler
-  const handleAddBtn = (formValue) => {
+  const handleAddBtn = async (formValue) => {
     console.log("thong tin can add la:");
     console.log(formValue);
     if (
       formValue.discount_img !== "" &&
       formValue.discount_name !== "" &&
-      formValue.end_date !== "" &&
-      formValue.start_date !== "" &&
+      formValue.end_day !== "" &&
+      formValue.start_day !== "" &&
       formValue.status !== "" 
       
     ) {
-      set(ref(db, "discounts/" + uuidv4()), {
-        discount_img: formValue.discount_img.trim(),
-        discount_name: formValue?.discount_name?.trim(),
-        end_date: formValue.end_date?.trim(),
-        start_date:  formValue.start_date?.trim() ,
-        status: 1,
-      });
+      formValue.start_day = formatdate(formValue.start_day)
+      formValue.end_day = formatdate(formValue.end_day)
+      const response =  await discountApi.add(formValue)
+      setDiscounts([...discounts, response.data])
       notify("success", "Thêm thành công !");
     }
     // handleClickOpenForm();
@@ -92,18 +96,27 @@ export default function DiscountPage() {
     }
   };
   // bấm nút save (edit) trong form
-  const handleSaveBtn = (formValue) => {
+  const handleSaveBtn = async (formValue) => {
     console.log("thong tin can edit la");
     console.log(formValue);
     if (
       discountId &&
       formValue.discount_img !== "" &&
       formValue.discount_name !== "" &&
-      formValue.end_date !== "" &&
-      formValue.start_date !== "" &&
+      formValue.end_day !== "" &&
+      formValue.start_day !== "" &&
       formValue.status !== "" 
-    ) {
-      set(ref(db, "/discounts/" + discountId), { ...formValue });
+    ) 
+    {
+      formValue.start_day = formatdate(formValue.start_day)
+      formValue.end_day = formatdate(formValue.end_day)
+      const response = await discountApi.update(discountId,formValue)
+      setDiscounts(discounts.map(item => {
+          if(item.id === discountId) {
+            return response.data
+          }
+          return item
+      }))
       notify("success", "Sửa thành công !");
     }
     handleClickOpenForm();
@@ -124,9 +137,11 @@ export default function DiscountPage() {
                 <FormInput
                   statusBtn={statusBtn}
                   // onClick={handleEditClickOpenForm}
+                  discounts={discounts}
                   discountId={discountId}
                   onAddBtn={handleAddBtn}
                   onSaveBtn={handleSaveBtn}
+                  
                 />
               </div>
             </>
@@ -149,6 +164,8 @@ export default function DiscountPage() {
               onEditClick={handleEditClick}
               onRemoveClick={handleRemoveClick}
               onToggleBtn={handleToggleBtn}
+              discounts={discounts}
+              setDiscounts={setDiscounts}
             />
           </div>
         </div>

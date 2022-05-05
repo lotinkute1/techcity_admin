@@ -3,6 +3,7 @@ import React, { useState } from "react";
 import { toast, ToastContainer } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
 import { v4 as uuidv4 } from "uuid";
+import categoryApi from "../../api/categoryApi";
 import "../../components/TableData/js/main";
 import TableDataCategories from "../../components/TableData/TableDataCategories";
 import FormInput from "./components/FormInput";
@@ -14,7 +15,7 @@ function CategoriesPage(props) {
   const [openForm, setOpenForm] = useState(false);
   const [categoryId, setCategoryId] = useState(0);
   const [statusBtn, setStatusBtn] = useState(true);
-
+  const [categories, setCategories] = useState([]);
   const notify = (type, message) =>
     toast[type](message, {
       position: "top-right",
@@ -35,14 +36,12 @@ function CategoriesPage(props) {
     setOpenForm(true);
   };
 
-  const handleAddBtn = (formValue) => {
-    const db = getDatabase();
+  const handleAddBtn = async (formValue) => {
+
     if (formValue.category_name !== "" && formValue.status !== "") {
-      set(ref(db, "categories/" + uuidv4()), {
-        ...formValue,
-        category_name: formValue.category_name.trim(),
-        status: formValue.status.trim(),
-      });
+     const response =  await categoryApi.add(formValue)
+     console.log(response)
+      setCategories([...categories, response])
       notify("success", "Thêm thành công !");
     }
   };
@@ -51,9 +50,10 @@ function CategoriesPage(props) {
     setCategoryId(categoryId);
     setStatusBtn(false);
   };
-  const handleRemoveClick = (categoryId) => {
+  const handleRemoveClick = async (categoryId) => {
     if (window.confirm("Bạn thực sự muốn xóa ?")) {
-      remove(ref(db, "/categories/" + categoryId));
+      await categoryApi.delete(categoryId)
+      setCategories(categories.filter(item => item.id !== categoryId))
       notify("info", "Xóa thành công !");
     } else {
       // Do nothing!
@@ -61,13 +61,19 @@ function CategoriesPage(props) {
     }
   };
 
-  const handleSaveBtn = (formValue) => {
+  const handleSaveBtn = async (formValue) => {
     if (
       categoryId &&
       formValue.category_name !== "" &&
       formValue.status !== ""
     ) {
-      set(ref(db, "/categories/" + categoryId), { ...formValue });
+      const response = await categoryApi.update(categoryId,formValue)
+      setCategories(categories.map(item => {
+          if(item.id === categoryId) {
+            return response.data
+          }
+          return item
+      }))
       notify("success", "Sửa thành công !");
     }
   };
@@ -126,6 +132,8 @@ function CategoriesPage(props) {
               onEditClick={handleEditClick}
               onRemoveClick={handleRemoveClick}
               onToggleBtn={handleToggleBtn}
+              categories={categories}
+              setCategories = {setCategories}
             />
           </div>
         </div>

@@ -1,10 +1,12 @@
 import { getDatabase, ref, remove, set } from "firebase/database";
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
 import { toast, ToastContainer } from "react-toastify";
 import { v4 as uuidv4 } from "uuid";
 import TableDataOrders from "../../components/TableData/TableDataOrders";
+import orderApi  from "../../api/orderApi";
 
 export default function OrdersPage() {
+  const [orders, setOrders] = useState([]);
   const db = getDatabase();
   const notify = (type, message) =>
     toast[type](message, {
@@ -35,17 +37,20 @@ export default function OrdersPage() {
 //     setOpenForm(true);
 //   };
   // xóa user handler
-  const handleRemoveClick = (orderId) => {
+
+
+  const handleRemoveClick = async (orderId) => {
     if (window.confirm("Bạn thực sự muốn xóa ?")) {
-      remove(ref(db, "/orders/" + orderId));
+      // remove(ref(db, "/products/" + productId));
+    
+      await orderApi.remove(orderId)
+      setOrders(orders.filter(item => item.id !== orderId))
       notify("info", "Xóa thành công !");
     } else {
       // Do nothing!
       console.log("Thing was not saved to the database.");
     }
   };
-
-  
 
   // tắt bặt trạng thái người dùng
   const handleToggleBtn = (order,status) => {
@@ -78,6 +83,13 @@ export default function OrdersPage() {
         break;
     }
   };
+
+
+  useEffect(() => {
+    orderApi.getAll().then(res => {
+      setOrders(res.data)
+    })
+}, [])
   
   return (
     <>
@@ -93,6 +105,7 @@ export default function OrdersPage() {
             //   onClick={handleEditClickOpenForm}
             //   onEditClick={handleEditClick}
               onRemoveClick={handleRemoveClick}
+              orders = {orders}
               onToggleBtn={handleToggleBtn}
             />
           </div>
