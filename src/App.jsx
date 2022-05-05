@@ -8,7 +8,7 @@ function App() {
       <div className="row gx-0">
         <Nav />
         <Routes>
-          <Route path="/:id/*" element={<Main />} />
+          <Route path="/:id/:token/*" element={<Main />} />
           {/* <Route path="/" element={<AdminPage />} /> */}
         </Routes>
       </div>

@@ -8,8 +8,7 @@ const axiosClient = axios.create({
   },
 });
 
-const raw = localStorage.getItem(StorageKeys.TOKEN) || null;
-const accessToken = raw ? raw.split('|')[1] : null;
+const accessToken = localStorage.getItem(StorageKeys.TOKEN) || null;
 
 axiosClient.interceptors.request.use(
   function (config) {

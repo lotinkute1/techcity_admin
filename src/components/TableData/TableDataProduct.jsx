@@ -74,26 +74,26 @@ export default function TableDataProduct({
               <td className="pl-0" width={"300px"}>
                 <div className="d-flex align-items-center justify-content-center">
                   <img
-                    src={product.img}
-                    alt={product.name}
+                    src={product?.img}
+                    alt={product?.name}
                     className="product_img"
                   />
                 </div>
               </td>
               <td width={"300px"} className="pt-84">
-                {product.name}
+                {product?.name}
               </td>
               <td width={"300px"} className="pt-84">
-                {product.brand}
+                {product?.brand}
               </td>
               <td width={"100px"} className="pt-84">
-                {product.stock_amount}
+                {product?.stock_amount}
               </td>
               <td width={"150px"} className="pt-84">
                 {new Intl.NumberFormat("vi-VN", {
                   style: "currency",
                   currency: "VND",
-                }).format(product.price)}
+                }).format(product?.price)}
               </td>
               <td className="pt-84">
                 <button

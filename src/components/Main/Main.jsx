@@ -10,7 +10,7 @@ import Router from "../../features/Router/Router";
 export default function Main() {
   const [currentUser, setCurrentUser] = useState(null);
 
-  let { id } = useParams();
+  let { id, token } = useParams();
 
   const notify = (type, message) =>
     toast[type](message, {
@@ -43,6 +43,12 @@ export default function Main() {
       localStorage.setItem(StorageKeys.USER, JSON.stringify(currentUser));
     }
   }, [currentUser]);
+
+  useEffect(() => {
+    if (token) {
+      localStorage.setItem(StorageKeys.TOKEN, token);
+    }
+  }, [token]);
 
   const handleLogout = () => {
     localStorage.removeItem(StorageKeys.USER);
