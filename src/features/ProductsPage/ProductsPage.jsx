@@ -52,7 +52,6 @@ function ProductsPage(props) {
       formValue.user_id !== "" &&
       formValue.brand !== ""
     ) {
-      console.log(formValue)
      const response =  await productApi.add(formValue)
       // set(ref(db, "products/" + uuidv4()), {
       //   product_name: formValue.product_name.trim(),

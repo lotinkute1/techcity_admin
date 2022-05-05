@@ -79,8 +79,8 @@ export default function TableDataUsers({
 
       <td className="pl-0" width={"100px"}>
         <div className="d-flex align-items-center justify-content-center">
-          <div className={"user_img_wrapper "+userTypeCSS(user.role)}>
-            <img src={user.ava} alt="" className="user_img " />
+          <div className={"user_img_wrapper "+userTypeCSS(user?.role)}>
+            <img src={user?.ava} alt="" className="user_img " />
           </div>
         </div>
       </td>
@@ -88,29 +88,29 @@ export default function TableDataUsers({
       <td width={"100px"} className="">
         <div className="d-flex align-items-center justify-content-center">
           <a href="/#" className="name">
-            {user.name}
+            {user?.name}
           </a>
         </div>
       </td>
       {/* user Email */}
       <td width={"120px"} className="">
-        {user.password || ""}
+        {user?.password || ""}
       </td>
       {/* user Email */}
       <td width={"150px"} className="">
-        {user.email}
+        {user?.email}
       </td>
       {/* phone */}
       <td width={"100px"} className="">
-        {user.phone_number}
+        {user?.phone_number}
       </td>
       {/* User address */}
       <td width={"150px"} className="">
-        {user.address}
+        {user?.address}
       </td>
       {/* User join date */}
       <td width={"130px"} className="">
-        {user.created_at}
+        {user?.created_at}
       </td>
 
       <td width={"100px"}>
@@ -119,11 +119,11 @@ export default function TableDataUsers({
             onClick={(e) => handleClickTogle(e, user)}
             type="checkbox"
             className="ios-switch-control-input"
-            defaultChecked={parseInt(user.status) > 0 ? true : false}
+            defaultChecked={parseInt(user?.status) > 0 ? true : false}
           />
           <span
             className="ios-switch-control-indicator"
-            defaultChecked={parseInt(user.status) > 0 ? true : false}
+            defaultChecked={parseInt(user?.status) > 0 ? true : false}
           />
         </label>
       </td>

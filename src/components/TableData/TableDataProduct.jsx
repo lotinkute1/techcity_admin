@@ -1,19 +1,17 @@
-import "./fonts/icomoon/style.css";
+import { getDatabase } from "firebase/database";
+import PropTypes from "prop-types";
+import { useEffect } from "react";
+import productApi from "../../api/productApi";
 // import "./css/owl.carousel.min.css";
 //  Bootstrap CSS
 // import "./css/bootstrap.min.css";
 // Style
 import "./css/style.css";
+import "./fonts/icomoon/style.css";
 // import "./js/popper.min.js";
 // import "./js/bootstrap.min.js";
 // import "./js/jquery-3.3.1.min.js";
 import "./js/main.js";
-import firebase from "../../utils/firebase";
-import { getDatabase, ref, onValue } from "firebase/database";
-import { useEffect, useState } from "react";
-import classNames from "classnames";
-import PropTypes from "prop-types";
-import productApi from "../../api/productApi";
 
 TableDataProduct.propTypes = {
   onEditClick: PropTypes.func,
