@@ -10,7 +10,7 @@ export default function Router() {
   return (
     <>
       <Routes>
-        {/* <Route path="/AdminPage" element={<AdminPage />} /> */}
+        <Route path="/AdminPage" element={<AdminPage />} />
         <Route path="/OrdersPage" element={<OrdersPage />} />
         <Route path="/ProductsPage" element={<ProductsPage />} />
         <Route path="/DiscountPage" element={<DiscountPage />} />

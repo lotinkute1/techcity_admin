@@ -56,6 +56,15 @@ export default function Nav() {
       </Link>
     );
   };
+  const navAdminPageRenderer = (currentUser) => {
+    return (
+      <Link to={`/${currentUser?.id}/${token}/AdminPage`}>
+        <div className="nav-bar__list">
+          <i className="far fa-calendar-check" /> admin
+        </div>
+      </Link>
+    );
+  };
 
   return (
     <div className="col-2">
@@ -67,47 +76,16 @@ export default function Nav() {
             <img src={logo} alt="" />
           </div>
           <div className="nav-bar__lists">
-            {/* {currentUser?.role === 1 && (
-              <Link to={`/${currentUser?.id}/AdminPage`}>
-                <div className="nav-bar__list">
-                  <i className="fas fa-user-secret" /> admin{" "}
-                </div>
-              </Link>
-            )}
-            {currentUser?.role === 1 && (
-              <Link to={`/${currentUser?.id}/OrdersPage`}>
-                <div className="nav-bar__list">
-                  <i className="fas fa-shopping-cart" /> orders{" "}
-                </div>
-              </Link>
-            )}
-            {currentUser?.role === 0 ? (
-              <Link to={`/${currentUser?.id}/OrdersPage`}>
-                <div className="nav-bar__list">
-                  <i className="fas fa-shopping-cart" /> orders
-                </div>
-              </Link>
-            ) : currentUser?.role === 1 ? (
-              <Link to={`/${currentUser?.id}/OrdersPage`}>
-                <div className="nav-bar__list">
-                  <i className="fas fa-shopping-cart" /> orders
-                </div>
-              </Link>
-            ) : (
-              ""
-            )} */}
+            {currentUser?.role === 0 && navAdminPageRenderer(currentUser)}
             {currentUser?.role === 0 && navOrderPageRenderer(currentUser)}
-            {currentUser?.role === 1 && navOrderPageRenderer(currentUser)}
-
             {currentUser?.role === 0 && navProductPageRenderer(currentUser)}
-            {currentUser?.role === 1 && navProductPageRenderer(currentUser)}
-
             {currentUser?.role === 0 && navDiscountPageRenderer(currentUser)}
-            {currentUser?.role === 1 && navDiscountPageRenderer(currentUser)}
-
             {currentUser?.role === 0 && navUserPageRenderer(currentUser)}
-
             {currentUser?.role === 0 && navCategoriesPageRenderer(currentUser)}
+
+            {currentUser?.role === 1 && navOrderPageRenderer(currentUser)}
+            {currentUser?.role === 1 && navProductPageRenderer(currentUser)}
+            {currentUser?.role === 1 && navDiscountPageRenderer(currentUser)}
           </div>
         </div>
       </div>
