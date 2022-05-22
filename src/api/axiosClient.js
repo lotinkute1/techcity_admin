@@ -7,8 +7,9 @@ const axiosClient = axios.create({
     "Content-Type": "application/json",
   },
 });
-
-const accessToken = localStorage.getItem(StorageKeys.TOKEN) || null;
+// console.log(window.location.pathname.split("/")[2]);
+const accessToken = window.location.pathname.split("/")[2] || null;
+// const accessToken = localStorage.getItem(StorageKeys.TOKEN) || null;
 
 axiosClient.interceptors.request.use(
   function (config) {

@@ -6,6 +6,19 @@ import reportWebVitals from "./reportWebVitals";
 import "./index.css";
 import "./assets/css/style.css";
 
+const originalSetItem = localStorage.setItem;
+
+localStorage.setItem = function(key, value) {
+  const event = new Event('itemInserted');
+
+  event.value = value; // Optional..
+  event.key = key; // Optional..
+
+  document.dispatchEvent(event);
+
+  originalSetItem.apply(this, arguments);
+};
+
 ReactDOM.render(
   <BrowserRouter>
     <React.StrictMode>

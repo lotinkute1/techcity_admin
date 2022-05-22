@@ -48,6 +48,10 @@ body {
   padding: 5px 40px;
   height: 70px;
 }
+.nav-bar__web-logo img{
+  height:100%;
+  width: unset;
+}
 .nav-bar__lists {
   display: flex;
   flex-direction: column;

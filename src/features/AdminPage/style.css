@@ -1,0 +1,7 @@
+.chart_title{
+    background-color:rgba(0,0,0,.03);
+    padding:1rem;
+    margin: 50px -1rem;
+    border-bottom: 1px solid rgba(0,0,0,.125);
+    border-top: 1px solid rgba(0,0,0,.125);
+}

@@ -22,7 +22,10 @@ const userApi = {
   },
   deleteUser(id) {
     return axiosClient.delete(`/user/deleteUser/${id}`)
-  }
+  },
+  getSoldData() {
+    return axiosClient.get("/user/getSoldData")
+  },
 };
 
 export default userApi;

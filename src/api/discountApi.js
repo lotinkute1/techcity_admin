@@ -2,7 +2,7 @@ import axiosClient from "./axiosClient";
 
 const discountApi = {
   getAll() {
-    const url = "/getDiscounts";
+    const url = "/discount/getDiscounts";
     return axiosClient.get(url);
   },
   getById(id) {

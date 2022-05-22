@@ -10,8 +10,8 @@ LineChart.propTypes = {
 function LineChart({ data, moreConfig }) {
   const config = {
     data,
-    xField: "year",
-    yField: "value",
+    xField: "month",
+    yField: "sold",
     label: {},
     point: {
       size: 5,

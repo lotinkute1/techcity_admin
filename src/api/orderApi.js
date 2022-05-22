@@ -12,35 +12,39 @@ const orderApi = {
   add(data) {
     const url = "/order/addOrder";
     return axiosClient.post(url, data);
-  }, 
+  },
   update(data) {
-    const url= `order/updateOrder/${data.id}`;
-    return axiosClient.put(url,data);
-},
-remove(id) {
-  const url= `order/deleteOrder/${id}`;
-  return axiosClient.delete(url);
-},
- getAllOrderDetail(){
-  const url = "/order/getOrdersDetail";
-  return axiosClient.get(url)
- },
- getOrderDetailById(id){
-  const url = `/order/getOrderDetail/${id}`;
-  return axiosClient.get(url)
- },
- addOrderDetail(data) {
-  const url = "/order/addOrderDetail";
-  return axiosClient.post(url, data);
-}, 
-updateOrderDetail(data) {
-  const url= `order/updateOrderDetail/${data.id}`;
-  return axiosClient.put(url,data);
-},
-removeOrderDetail(id) {
-  const url= `order/deleteOrderDetail/${id}`;
-  return axiosClient.delete(url);
-},
+    const url = `order/updateOrder/${data.id}`;
+    return axiosClient.put(url, data);
+  },
+  remove(id) {
+    const url = `order/deleteOrder/${id}`;
+    return axiosClient.delete(url);
+  },
+  getAllOrderDetail() {
+    const url = "/order/getOrdersDetail";
+    return axiosClient.get(url);
+  },
+  getOrderDetailById(id) {
+    const url = `/order/getOrderDetail/${id}`;
+    return axiosClient.get(url);
+  },
+  addOrderDetail(data) {
+    const url = "/order/addOrderDetail";
+    return axiosClient.post(url, data);
+  },
+  updateOrderDetail(data) {
+    const url = `order/updateOrderDetail/${data.id}`;
+    return axiosClient.put(url, data);
+  },
+  removeOrderDetail(id) {
+    const url = `order/deleteOrderDetail/${id}`;
+    return axiosClient.delete(url);
+  },
+  getSoldProductsCountByCategory() {
+    const url = `order/getSoldProductsCountByCategory`;
+    return axiosClient.get(url);
+  },
 };
 
 export default orderApi;

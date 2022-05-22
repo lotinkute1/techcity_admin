@@ -31,7 +31,7 @@ function ColumnChart({ data, moreConfig }) {
         alias: "类别",
       },
       sales: {
-        alias: "销售额",
+        alias: "Đã bán",
       },
     },
     ...moreConfig,

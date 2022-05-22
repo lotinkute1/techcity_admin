@@ -6,6 +6,7 @@ import "react-toastify/dist/ReactToastify.css";
 import userApi from "../../api/userApi";
 import StorageKeys from "../../constants";
 import Router from "../../features/Router/Router";
+import "./style.css";
 
 export default function Main() {
   const [currentUser, setCurrentUser] = useState(null);
@@ -56,7 +57,7 @@ export default function Main() {
   };
 
   return (
-    <div className="col">
+    <div className="col main_page_container">
       {/* right container */}
       <div className="content">
         <div className="content__wrapper">
